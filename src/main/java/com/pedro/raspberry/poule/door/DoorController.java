@@ -1,7 +1,6 @@
 package com.pedro.raspberry.poule.door;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class DoorController {
 
+    /**
+     * Note : service is choosen depending on profile used.
+     * "default" profile will choose DoorServiceMock impl.
+     * "prod" profile will choose GPIODoorService.
+     */
     @Autowired
-    @Qualifier("doorServiceMock")
+    //@Qualifier("doorServiceMock")
     private DoorService service;
 
     @GetMapping("/door")

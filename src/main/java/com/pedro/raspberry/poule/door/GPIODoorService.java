@@ -1,11 +1,13 @@
 package com.pedro.raspberry.poule.door;
 
 import com.pi4j.io.gpio.*;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
 @Service("doorService")
+@Profile("prod")
 public class GPIODoorService implements DoorService {
 
     private GpioController gpio;

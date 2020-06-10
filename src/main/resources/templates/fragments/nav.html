@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" th:fragment="page(module)">
+    <a class="navbar-brand" href="#">
+        <span th:text="#{nav.title}"/>
+    </a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" th:classappend="${module == 'dashboard' ? 'disabled' : ''}">
+                <a class="nav-link" href="/dashboard"><span th:text="#{nav.dashboard}"/></a>
+            </li>
+            <li class="nav-item" th:classappend="${module == 'door' ? 'disabled' : ''}">
+                <a class="nav-link" href="/door"><span th:text="#{nav.door}"/></a>
+            </li>
+        </ul>
+    </div>
+</nav>
+</body>

@@ -12,11 +12,10 @@ public class DoorController {
 
     /**
      * Note : service is choosen depending on profile used.
-     * "default" profile will choose DoorServiceMock impl.
-     * "prod" profile will choose GPIODoorService.
+     * "default" profile will select DoorServiceMock impl.
+     * "prod" profile will select GPIODoorService which is the real service.
      */
     @Autowired
-    //@Qualifier("doorServiceMock")
     private DoorService service;
 
     @GetMapping("/door")

@@ -1,5 +1,7 @@
 package com.pedro.raspberry.poule.door;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
@@ -9,20 +11,22 @@ import javax.annotation.PostConstruct;
 @Profile("default")
 public class DoorServiceMock implements DoorService {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
     @PostConstruct
     public void initGPIO() {
-        System.out.println("InitGPIO inoked");
+        logger.info("<MOCK> InitGPIO inoked");
     }
 
     public void stepUp(long ms) {
-        System.out.println("stepUp invoked with " + ms + " ms");
+        logger.info("<MOCK> stepUp invoked with {} ms", ms);
     }
 
     public void stepDown(long ms) {
-        System.out.println("stepDown invoked with " + ms + " ms");
+        logger.info("<MOCK> stepDown invoked with {} ms", ms);
     }
 
     public void stop() {
-        System.out.println("stop invoked");
+        logger.info("<MOCK> stop invoked");
     }
 }

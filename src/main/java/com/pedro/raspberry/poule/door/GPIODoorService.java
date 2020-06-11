@@ -1,62 +1,118 @@
 package com.pedro.raspberry.poule.door;
 
 import com.pi4j.io.gpio.*;
+import com.pi4j.wiringpi.SoftPwm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Service("doorService")
 @Profile("prod")
 public class GPIODoorService implements DoorService {
 
-    private GpioController gpio;
-    private GpioPinDigitalOutput M1En;
-    private GpioPinDigitalOutput M1_In1;
-    private GpioPinDigitalOutput M1_In2;
+    private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
+    private Optional<Pins> physical = Optional.empty();
+
+    private class Pins {
+        public GpioController gpio;
+        public GpioPinDigitalOutput M1En;
+        public GpioPinDigitalOutput M1_In1;
+        public GpioPinDigitalOutput M1_In2;
+
+        public Pins(GpioController gpio, GpioPinDigitalOutput m1En, GpioPinDigitalOutput m1_In1, GpioPinDigitalOutput m1_In2) {
+            this.gpio = gpio;
+            M1En = m1En;
+            M1_In1 = m1_In1;
+            M1_In2 = m1_In2;
+        }
+    }
 
     @PostConstruct
-    public void initGPIO() {
+    private void initGPIO() {
+
+        GpioController gpio;
+        GpioPinDigitalOutput M1En;
+        GpioPinDigitalOutput M1_In1;
+        GpioPinDigitalOutput M1_In2;
 
         try {
             // create gpio controller instance
             gpio = GpioFactory.getInstance();
 
             // provision gpio pins #04 as an output pin and make sure is is set to LOW at startup
-            M1En = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_21,
+            M1En = gpio.provisionDigitalOutputPin(DoorUsedPins.PIN_ENABLE.getPin(),
                     "M1_En",
                     PinState.LOW);
 
-            M1_In1 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_20,
+            M1_In1 = gpio.provisionDigitalOutputPin(DoorUsedPins.PIN1.getPin(),
                     "M1_In1",
                     PinState.LOW);
 
-            M1_In2 = gpio.provisionDigitalOutputPin(RaspiPin.GPIO_16,
+            M1_In2 = gpio.provisionDigitalOutputPin(DoorUsedPins.PIN2.getPin(),
                     "M1_In2",
                     PinState.LOW);
-            // TODO
-            //gpio.setMode(PinMode.BCM);
-            gpio.setMode(PinMode.PWM_OUTPUT, M1En);
+
+            logger.info("Init GPIO OK");
+            physical = Optional.of(new Pins(gpio, M1En, M1_In1, M1_In2));
 
         } catch (UnsatisfiedLinkError error) {
-            System.out.println("Cannot invoke this method without Raspberry. You must deploy the application on the Rasp or use a mock instance of this service (doorServiceMock)");
+            logger.error("Cannot invoke this method without Raspberry. You must deploy the application on the Rasp or use a mock instance of this service (doorServiceMock)");
         }
     }
 
-    public void stepUp(long ms) {
-        stop();
-        M1_In1.pulse(ms);
-        stop();
+    public void stepUp(final long ms) {
+        logger.info("stepUp invoked with {} ms", ms);
+        physical.ifPresent( p -> {
+            try {
+                p.M1_In1.high();
+                p.M1_In2.low();
+                start(p);
+                Thread.sleep(ms);
+            } catch (InterruptedException e) {
+                logger.error("thread interrupted while stepping up", e);
+            } finally {
+                stop(p);
+            }
+        });
     }
 
     public void stepDown(long ms) {
-        stop();
-        M1_In2.pulse(ms);
-        stop();
+        logger.info("stepDown invoked with {} ms", ms);
+        physical.ifPresent( p -> {
+            try {
+                p.M1_In2.high();
+                p.M1_In1.low();
+                start(p);
+                Thread.sleep(ms);
+            } catch (InterruptedException e) {
+                logger.error("thread interrupted while stepping down", e);
+            } finally {
+                stop(p);
+            }
+        });
     }
 
-    public void stop() {
-        M1_In1.low();
-        M1_In2.low();
+    public void start(Pins p) {
+        p.M1En.high();
+/*        SoftPwm.softPwmCreate(DoorUsedPins.PIN1.getPin().getAddress(), 0, 100);
+        SoftPwm.softPwmWrite(DoorUsedPins.PIN1.getPin().getAddress(), 100); // 100% de la vitesse
+        SoftPwm.softPwmCreate(DoorUsedPins.PIN2.getPin().getAddress(), 0, 100);
+        SoftPwm.softPwmWrite(DoorUsedPins.PIN2.getPin().getAddress(), 100); // 100% de la vitesse
+  */  }
+
+    public void stop(Pins p) {
+        try {
+            logger.info("stop motor invoked");
+            p.M1_In1.low();
+            p.M1_In2.low();
+            p.M1En.low();
+        } finally {
+            //p.gpio.shutdown();
+        }
     }
 }

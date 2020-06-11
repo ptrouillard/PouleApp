@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Poule index</title>
+    <title>Poule door</title>
     <meta http-equiv="Content-Type" content="text/html;" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -10,10 +10,10 @@
 <body>
     <nav th:replace="fragments/nav :: page(module='door')">...</nav>
 
-    <div class="mx-auto p-5">
+    <div class="mx-auto p-2">
 
         <div class="alert alert-warning" role="alert" th:if="${ timeDone != null}">
-            <span th:text="#{door.move.done(*{timeDone})}"/>
+            <span th:text="#{door.move.done(${timeDone})}"/>
         </div>
 
         <form action="/door/stepup" method="post" th:object="${door}" id="form_stepup">

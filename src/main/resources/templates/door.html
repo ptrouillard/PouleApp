@@ -19,7 +19,7 @@
         <form action="/door/stepup" method="post" th:object="${door}" id="form_stepup">
             <div class="form-group">
                 <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="text" th:field="*{time}" class="form-control" size=10/>
+                <input type="number" th:field="*{time}" class="form-control" size=10/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" th:text="#{door.stepup}" form="form_stepup">Step up</button>
@@ -30,7 +30,7 @@
         <form action="/door/stepdown" method="post" th:object="${door}" id="form_stepdown">
             <div class="form-group">
                 <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="text" th:field="*{time}" class="form-control" size=10/>
+                <input type="number" th:field="*{time}" class="form-control" size=10/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" th:text="#{door.stepdown}" form="form_stepdown">Step down</button>
@@ -41,7 +41,7 @@
         <form action="/door/open" method="post" th:object="${door}" id="form_open">
             <div class="form-group">
                 <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="text" th:field="*{time2}" class="form-control" size=10/>
+                <input type="number" th:field="*{time2}" class="form-control" size=10/>
                 <input type="hidden" th:field="*{time}"/>
                 <input type="hidden" th:field="*{time3}"/>
             </div>
@@ -52,7 +52,7 @@
         <form action="/door/close" method="post" th:object="${door}" id="form_close">
             <div class="form-group">
                 <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="text" th:field="*{time3}" class="form-control" size=10/>
+                <input type="number" th:field="*{time3}" class="form-control" size=10/>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary" th:text="#{door.close}" form="form_close">Close door</button>

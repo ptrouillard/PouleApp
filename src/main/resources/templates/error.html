@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <style>
+body {
+    font-family : Arial, Helvetica, Sans-Serif;
+}
+    </style>
+</head>
+<body>
+<h1>Oups !</h1>
+
+<p>
+    An Error occured at <span th:text="${timestamp}" style="font-weight : Bold"/>, when calling <span th:text="${path}" style="font-weight : Bold"/>
+    <br>
+    This is a <span th:text="${error}" style="font-weight : Bold"/>, which is not what we expected of course !
+    <br>
+    The message we got is <span th:text="${message}" style="font-weight : Bold"/>, do you know it ?
+    <br>
+    As I know that you are an expert (who else could use this nerdy app !), take a look at this stacktrace :
+    <br>
+    <span th:text="${trace}" style="font-family : Courier"/>
+</p>
+
+</body>
+</html>

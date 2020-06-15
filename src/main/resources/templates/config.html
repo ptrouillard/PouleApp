@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Poule cron</title>
+    <meta http-equiv="Content-Type" content="text/html;" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <nav th:replace="fragments/nav :: page(module='config')">...</nav>
+
+    <div class="mx-auto p-2">
+
+        <div class="alert alert-success" role="alert" th:if="${ info != null}">
+            <span th:text="#{${info}}"/>
+        </div>
+        <div class="alert alert-error" role="alert" th:if="${ error != null}">
+            <span th:text="#{${error}}"/>
+        </div>
+
+        <form action="/config/save" method="post" th:object="${config}" id="form_config">
+            <div class="form-group">
+                <label for="CamUrl" th:text="#{config.cam.url}"/>
+                <input type="text" th:field="*{url}" class="form-control" size=10/>
+            </div>
+        </form>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" th:text="#{config.save}" form="form_config">Save config</button>
+        </div>
+    </div>
+</body>
+</html>

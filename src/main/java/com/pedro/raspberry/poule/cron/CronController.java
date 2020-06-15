@@ -18,6 +18,7 @@ public class CronController {
     public String cron(Model model) {
         try {
             model.addAttribute("cron", prepareCommand());
+            prepareAttributes(model);
         } catch (SchedulerException e) {
             model.addAttribute("error", "cron.error.prepare");
         }
@@ -30,6 +31,7 @@ public class CronController {
             service.scheduleOpening(command.getOpenExpression());
             model.addAttribute("cron", prepareCommand());
             model.addAttribute("info", "cron.info.open.expression.modified");
+            prepareAttributes(model);
         } catch (SchedulerException e) {
             model.addAttribute("error", "cron.error.open.schedule");
         }
@@ -42,6 +44,7 @@ public class CronController {
             service.scheduleClosing(command.getCloseExpression());
             model.addAttribute("cron", prepareCommand());
             model.addAttribute("info", "cron.info.close.expression.modified");
+            prepareAttributes(model);
         } catch (SchedulerException e) {
             model.addAttribute("error", "cron.error.close.schedule");
         }
@@ -53,6 +56,7 @@ public class CronController {
         service.pauseScheduler();
         model.addAttribute("cron", prepareCommand());
         model.addAttribute("info", "cron.info.scheduler.paused");
+        prepareAttributes(model);
         return "cron";
     }
 
@@ -61,14 +65,20 @@ public class CronController {
         service.resumeScheduler();
         model.addAttribute("cron", prepareCommand());
         model.addAttribute("info", "cron.info.scheduler.resumed");
+        prepareAttributes(model);
         return "cron";
+    }
+
+    private void prepareAttributes(Model model) throws SchedulerException {
+        model.addAttribute("schedulerStarted", service.isSchedulerStarted());
+        model.addAttribute("schedulerShutdown", service.isShutdown());
+        model.addAttribute("schedulerPaused", service.isPaused());
     }
 
     private CronCommand prepareCommand() throws SchedulerException {
         CronCommand command = new CronCommand();
         command.setOpenExpression(service.getCurrentOpenExpression());
         command.setCloseExpression(service.getCurrentCloseExpression());
-        command.setSchedulerStarted(service.isSchedulerStarted());
         return command;
     }
 }

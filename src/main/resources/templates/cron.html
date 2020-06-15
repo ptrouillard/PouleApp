@@ -6,25 +6,24 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/custom/cron.css" rel="stylesheet" type="text/css">
 </head>
 <body>
     <nav th:replace="fragments/nav :: page(module='cron')">...</nav>
 
     <div class="mx-auto p-2">
 
-        <div class="alert alert-info" role="alert" th:if="${ info != null}">
+        <div class="alert alert-success" role="alert" th:if="${ info != null}">
             <span th:text="#{${info}}"/>
         </div>
         <div class="alert alert-error" role="alert" th:if="${ error != null}">
             <span th:text="#{${error}}"/>
         </div>
+
         <form action="/cron/open" method="post" th:object="${cron}" id="form_open">
             <div class="form-group">
                 <label for="OpenExpression" th:text="#{cron.open.expression}"/>
                 <input type="text" th:field="*{openExpression}" class="form-control" size=10/>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{cron.open}" form="form_open">Open programmation</button>
             </div>
         </form>
         <form action="/cron/close" method="post" th:object="${cron}" id="form_close">
@@ -32,20 +31,28 @@
                 <label for="CloseExpression" th:text="#{cron.close.expression}"/>
                 <input type="text" th:field="*{closeExpression}" class="form-control" size=10/>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{cron.close}" form="form_close">Close programmation</button>
-            </div>
         </form>
         <form action="/cron/shutdown" method="post" th:object="${cron}" id="form_shutdown">
             <div class="form-group">
-                <button type="submit" class="btn btn-danger" th:text="#{cron.shutdown}" form="form_shutdown" th:classappend="${isSchedulerStarted == 'false' ? 'disabled' : ''}">Stop scheduler</button>
             </div>
         </form>
         <form action="/cron/start" method="post" th:object="${cron}" id="form_start">
             <div class="form-group">
-                <button type="submit" class="btn btn-success" th:text="#{cron.start}" form="form_start" th:classappend="${isSchedulerStarted == 'true' ? 'disabled' : ''}">Start scheduler</button>
             </div>
         </form>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary" th:text="#{cron.open}" form="form_open">Open programmation</button>
+            <button type="submit" class="btn btn-primary" th:text="#{cron.close}" form="form_close">Close programmation</button>
+            <button th:if="${schedulerPaused == false}" type="submit" class="btn btn-danger" th:text="#{cron.shutdown}" form="form_shutdown">Pause scheduler</button>
+            <button th:unless="${schedulerPaused == false}" type="submit" class="btn btn-success" th:text="#{cron.start}" form="form_start">Resume scheduler</button>
+        </div>
+        <div th:if="${schedulerPaused == false}" class="rounded text-active border-success">
+            <img src="/images/bootstrap-icons-1.0.0-alpha4/alarm.svg" width="32" height="32" title="Scheduler started"/>
+            <span th:text="#{cron.status.active}">scheduler active</span>
+        </div>
+        <div th:unless="${schedulerPaused == false}"  class="rounded text-danger border-danger">
+            <img src="/images/bootstrap-icons-1.0.0-alpha4/pause.svg" width="32" height="32" title="Scheduler started"/>
+            <span th:text="#{cron.status.paused}">scheduler paused</span>
         </div>
     </div>
 </body>

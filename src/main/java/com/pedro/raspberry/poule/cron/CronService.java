@@ -109,15 +109,26 @@ public class CronService {
 
     public void pauseScheduler() throws SchedulerException {
         logger.info("The scheduler has been paused. No job will be executed");
-        sched.pauseAll();
+        if (!sched.isInStandbyMode())
+            sched.standby();
     }
 
     public void resumeScheduler() throws SchedulerException {
         logger.info("The scheduler has been resumed.");
-        sched.resumeAll();
+        if (sched.isInStandbyMode())
+            sched.start();
     }
 
     public boolean isSchedulerStarted() throws SchedulerException {
         return sched.isStarted();
     }
+
+    public boolean isPaused() throws SchedulerException {
+        return sched.isInStandbyMode();
+    }
+
+    public boolean isShutdown() throws SchedulerException {
+        return sched.isShutdown();
+    }
+
 }

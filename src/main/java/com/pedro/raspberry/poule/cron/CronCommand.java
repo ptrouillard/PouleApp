@@ -5,6 +5,8 @@ public class CronCommand {
     private String openExpression;
     private String closeExpression;
     private boolean schedulerStarted;
+    private boolean schedulerShutdown;
+    private boolean schedulerPaused;
 
     public String getOpenExpression() {
         return openExpression;
@@ -28,5 +30,21 @@ public class CronCommand {
 
     public void setSchedulerStarted(boolean schedulerStarted) {
         this.schedulerStarted = schedulerStarted;
+    }
+
+    public void setSchedulerShutdown(boolean shutdown) {
+        this.schedulerShutdown = shutdown;
+    }
+
+    public void setSchedulerPaused(boolean paused) {
+        this.schedulerPaused = paused;
+    }
+
+    public boolean isSchedulerShutdown() {
+        return schedulerShutdown;
+    }
+
+    public boolean isSchedulerPaused() {
+        return schedulerPaused;
     }
 }

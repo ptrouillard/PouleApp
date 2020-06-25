@@ -11,12 +11,10 @@
     <nav th:replace="fragments/nav :: page(module='dashboard')">...</nav>
 
     <div class="jumbotron">
-        <h1 class="display-4">Bienvenue dans le poulailler !</h1>
-        <p class="lead">C'est une application toute simple pour pouvoir gérer l'ouverture et la fermeture du poulailler.</p>
+        <h1 class="display-4" th:text="#{dashboard.welcome}"></h1>
+        <p class="lead" th:text="#{dashboard.lead}"></p>
         <hr class="my-4">
-        <p>Clique sur "Porte" pour commencer à gérer la porte du poulailler</p>
-        <iframe th:src="${url}" width="800" height="600"/>
-        <a class="btn btn-primary btn-lg" href="#" role="button">Pour en savoir plus</a>
+        <p th:text="#{dashboard.main}"></p>
     </div>
 
 

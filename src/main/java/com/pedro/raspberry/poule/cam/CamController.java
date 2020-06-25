@@ -1,4 +1,4 @@
-package com.pedro.raspberry.poule.dashboard;
+package com.pedro.raspberry.poule.cam;
 
 import com.pedro.raspberry.poule.config.ConfigService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,15 +7,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class DashboardController {
+public class CamController {
 
-    @GetMapping("/")
-    public String indexToDashboard(Model model) {
-        return "dashboard";
-    }
+    @Autowired
+    private ConfigService configService;
 
-    @GetMapping("/dashboard")
+    @GetMapping("/cam")
     public String dashboard(Model model) {
-        return "dashboard";
+        model.addAttribute("url", configService.getWebcamUrl());
+        return "cam";
     }
 }

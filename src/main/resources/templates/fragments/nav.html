@@ -24,6 +24,9 @@
         <li class="nav-item" th:classappend="${module == 'cam' ? 'disabled' : ''}">
             <a class="nav-link" href="/cam"><span th:text="#{nav.cam}"/></a>
         </li>
+        <li class="nav-item" th:classappend="${module == 'audit' ? 'disabled' : ''}">
+            <a class="nav-link" href="/audit?pageNumber=0"><span th:text="#{nav.audit}"/></a>
+        </li>
     </ul>
 
 

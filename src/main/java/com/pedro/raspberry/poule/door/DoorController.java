@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.door;
 
+import com.pedro.raspberry.poule.audit.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,9 @@ public class DoorController {
     @Autowired
     private DoorService service;
 
+    @Autowired
+    private AuditService auditService;
+
     @GetMapping("/door")
     public String door(Model model) {
         DoorCommand doorCommand = prepareDoorCommand(0L);
@@ -27,6 +31,7 @@ public class DoorController {
 
     @PostMapping("/door/stepup")
     public String stepup(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+        auditService.audit("Door moved upwards");
         service.stepUp(doorCommand.getTime());
         model.addAttribute("timeDone", doorCommand.getTime());
         model.addAttribute("door", doorCommand);
@@ -35,6 +40,7 @@ public class DoorController {
 
     @PostMapping("/door/stepdown")
     public String stepdown(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+        auditService.audit("Door moved downwards");
         service.stepDown(doorCommand.getTime());
         model.addAttribute("timeDone", doorCommand.getTime());
         model.addAttribute("door", doorCommand);
@@ -43,6 +49,7 @@ public class DoorController {
 
     @PostMapping("/door/open")
     public String open(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+        auditService.audit("Door is opened");
         service.stepUp(doorCommand.getTime2());
         model.addAttribute("timeDone", doorCommand.getTime2());
         model.addAttribute("door", doorCommand);
@@ -51,6 +58,7 @@ public class DoorController {
 
     @PostMapping("/door/close")
     public String close(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+        auditService.audit("Door is closed");
         service.stepDown(doorCommand.getTime3());
         model.addAttribute("timeDone", doorCommand.getTime3());
         model.addAttribute("door", doorCommand);

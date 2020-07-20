@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.cron;
 
+import com.pedro.raspberry.poule.audit.AuditService;
 import org.quartz.SchedulerException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,9 @@ public class CronController {
 
     @Autowired
     private CronService service;
+
+    @Autowired
+    private AuditService auditService;
 
     @GetMapping("/cron")
     public String cron(Model model) {
@@ -28,6 +32,7 @@ public class CronController {
     @PostMapping("/cron/open")
     public String open(Model model, @ModelAttribute CronCommand command) {
         try {
+            auditService.audit("Open scheduling is modified to " + command.getOpenExpression());
             service.scheduleOpening(command.getOpenExpression());
             model.addAttribute("cron", prepareCommand());
             model.addAttribute("info", "cron.info.open.expression.modified");
@@ -41,6 +46,7 @@ public class CronController {
     @PostMapping("/cron/close")
     public String close(Model model, @ModelAttribute CronCommand command) throws SchedulerException {
         try {
+            auditService.audit("Close scheduling is modified to " + command.getCloseExpression());
             service.scheduleClosing(command.getCloseExpression());
             model.addAttribute("cron", prepareCommand());
             model.addAttribute("info", "cron.info.close.expression.modified");
@@ -53,6 +59,7 @@ public class CronController {
 
     @PostMapping("/cron/shutdown")
     public String shutdown(Model model) throws SchedulerException {
+        auditService.audit("Scheduling is paused");
         service.pauseScheduler();
         model.addAttribute("cron", prepareCommand());
         model.addAttribute("info", "cron.info.scheduler.paused");
@@ -62,6 +69,7 @@ public class CronController {
 
     @PostMapping("/cron/start")
     public String start(Model model) throws SchedulerException {
+        auditService.audit("Scheduling is resumed");
         service.resumeScheduler();
         model.addAttribute("cron", prepareCommand());
         model.addAttribute("info", "cron.info.scheduler.resumed");

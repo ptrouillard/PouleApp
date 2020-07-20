@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.config;
 
+import com.pedro.raspberry.poule.audit.AuditService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,10 @@ public class ConfigController {
     @Autowired
     private ConfigService service;
 
+    @Autowired
+    private AuditService auditService;
+
+
     @GetMapping("/config")
     public String config(Model model) {
         model.addAttribute("config", prepareCommand());
@@ -29,6 +34,7 @@ public class ConfigController {
     @PostMapping("/config/save")
     public String save(Model model, @ModelAttribute ConfigCommand command) {
         try {
+            auditService.audit("config has been modified");
             service.save(command.getUrl());
             model.addAttribute("config", prepareCommand());
             model.addAttribute("info", "config.info.saved");

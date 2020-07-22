@@ -23,7 +23,7 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="audit : ${audits.content}">
+            <tr th:each="audit : ${currentPage.content}">
                     <th scope="row" th:text="${audit.id}">Id</th>
                     <td th:text="${audit.date}">Date</td>
                     <td th:text="${audit.comment}">Action</td>
@@ -31,20 +31,10 @@
             </tbody>
         </table>
 
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Audit navigation">
             <ul class="pagination">
-                <li class="page-item">
-                    <a class="page-link" href="/audit?pageNumber=0" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="/audit?pageNumber=1" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
+                <li class="page-item" th:each="page : ${pages}" th:classappend="${page.pageNumber == currentPageNumber} ? active : ''">
+                    <a class="page-link" th:text="${page.pageNumber}" th:href="@{${'/audit?pageNumber=' + page.pageNumber}}">x</a>
                 </li>
             </ul>
         </nav>

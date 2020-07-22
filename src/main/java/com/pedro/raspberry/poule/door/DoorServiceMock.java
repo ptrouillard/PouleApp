@@ -20,10 +20,20 @@ public class DoorServiceMock implements DoorService {
 
     public void stepUp(long ms) {
         logger.info("<MOCK> stepUp invoked with {} ms", ms);
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            logger.error("action interrupted", e);
+        }
     }
 
     public void stepDown(long ms) {
         logger.info("<MOCK> stepDown invoked with {} ms", ms);
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException e) {
+            logger.error("action interrupted");
+        }
     }
 
     public void stop() {

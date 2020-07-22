@@ -1,6 +1,5 @@
 package com.pedro.raspberry.poule.cron.job;
 
-import com.pedro.raspberry.poule.door.DoorCommand;
 import com.pedro.raspberry.poule.door.DoorConstants;
 import com.pedro.raspberry.poule.door.DoorService;
 import org.quartz.Job;

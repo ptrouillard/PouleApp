@@ -6,62 +6,113 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <style>
+    .spinner {
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        margin-left: 0px;
+        margin-top: 0px;
+        text-align: center;
+        z-index: 1234;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+        opacity : 0.5;
+    }
+    </style>
+    <script type="text/javascript">
+         $("#form_open").submit(function(e) {
+             e.preventDefault();
+             alert("OK");
+             $("#spinner").show();
+            this.submit();
+        });
+
+    </script>
 </head>
 <body>
     <nav th:replace="fragments/nav :: page(module='door')">...</nav>
 
+    <div id="spinner" class="spinner" style="display:none;">
+        <img id="img-spinner" src="/images/tenor.gif" alt="Loading"/>
+    </div>
+
     <div class="mx-auto p-2">
 
-    <h2 th:text="#{door.title}"></h2>
-
+        <h2 th:text="#{door.title}"></h2>
         <div class="alert alert-warning" role="alert" th:if="${ timeDone != null}">
             <span th:text="#{door.move.done(${timeDone})}"/>
         </div>
 
-        <form action="/door/stepup" method="post" th:object="${door}" id="form_stepup">
-            <div class="form-group">
-                <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="number" th:field="*{time}" class="form-control" size=10/>
+        <div class="alert alert-warning" role="alert" th:if="${ doorSaved == true}">
+            <span th:text="#{door.save.done}"/>
+        </div>
+
+
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <!-- save data only -->
+                    <form action="/door/save" method="post" th:object="${door}" id="form_save">
+                        <div class="form-group">
+                            <label for="Time" th:text="#{door.action_duration.step.open}"/>
+                            <input type="number" th:field="*{openStepTime}" class="form-control" size=10/>
+                        </div>
+                        <div class="form-group">
+                            <label for="Time" th:text="#{door.action_duration.step.close}"/>
+                            <input type="number" th:field="*{closeStepTime}" class="form-control" size=10/>
+                        </div>
+                        <div class="form-group">
+                            <label for="Time" th:text="#{door.action_duration.open}"/>
+                            <input type="number" th:field="*{openTime}" class="form-control" size=10/>
+                        </div>
+                        <div class="form-group">
+                            <label for="Time" th:text="#{door.action_duration.close}"/>
+                            <input type="number" th:field="*{closeTime}" class="form-control" size=10/>
+                        </div>
+                        <input type="hidden" th:field="${door.closeTime}"/>
+                        <input type="hidden" th:field="${door.openTime}"/>
+                        <input type="hidden" th:field="${door.closeStepTime}"/>
+                        <input type="hidden" th:field="${door.openStepTime}"/>
+                        <input type="hidden" th:field="${door.id}"/>
+                    </form>
+                </div>
+                <div class="col">
+                    <!-- just a step up -->
+                    <form action="/door/stepup" method="post" th:object="${door}" id="form_stepup">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" th:text="#{door.stepup}" form="form_stepup">Step up</button>
+                        </div>
+                    </form>
+                    <!-- just a step down -->
+                    <form action="/door/stepdown" method="post" th:object="${door}" id="form_stepdown">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" th:text="#{door.stepdown}" form="form_stepdown">Step down</button>
+                        </div>
+                    </form>
+                    <!-- open door -->
+                    <form action="/door/open" method="post" th:object="${door}" id="form_open">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" th:text="#{door.open}" form="form_open">Open door</button>
+                        </div>
+                    </form>
+
+                    <!-- close door -->
+                    <form action="/door/close" method="post" th:object="${door}" id="form_close">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" th:text="#{door.close}" form="form_close">Close door</button>
+                        </div>
+                    </form>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success" th:text="#{door.action_save}" form="form_save">Save data</button>
+                    </div>
+
+                </div>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{door.stepup}" form="form_stepup">Step up</button>
-                <input type="hidden" th:field="*{time2}"/>
-                <input type="hidden" th:field="*{time3}"/>
-            </div>
-        </form>
-        <form action="/door/stepdown" method="post" th:object="${door}" id="form_stepdown">
-            <div class="form-group">
-                <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="number" th:field="*{time}" class="form-control" size=10/>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{door.stepdown}" form="form_stepdown">Step down</button>
-                <input type="hidden" th:field="*{time2}"/>
-                <input type="hidden" th:field="*{time3}"/>
-            </div>
-        </form>
-        <form action="/door/open" method="post" th:object="${door}" id="form_open">
-            <div class="form-group">
-                <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="number" th:field="*{time2}" class="form-control" size=10/>
-                <input type="hidden" th:field="*{time}"/>
-                <input type="hidden" th:field="*{time3}"/>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{door.open}" form="form_open">Open door</button>
-            </div>
-        </form>
-        <form action="/door/close" method="post" th:object="${door}" id="form_close">
-            <div class="form-group">
-                <label for="Time" th:text="#{door.action_duration}"/>
-                <input type="number" th:field="*{time3}" class="form-control" size=10/>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{door.close}" form="form_close">Close door</button>
-                <input type="hidden" th:field="*{time}"/>
-                <input type="hidden" th:field="*{time2}"/>
-            </div>
-        </form>
         </div>
     </div>
 </body>

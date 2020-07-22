@@ -36,7 +36,7 @@ public class AuditService {
 
            @Override
            public long getOffset() {
-               return page*10;
+               return (page-1)*10;
            }
 
            @Override
@@ -51,17 +51,17 @@ public class AuditService {
 
            @Override
            public Pageable previousOrFirst() {
-               return getPageable(page-1 < 0 ? 0 : page-1);
+               return getPageable(page-1 < 1 ? 1 : page-1);
            }
 
            @Override
            public Pageable first() {
-               return getPageable(0);
+               return getPageable(1);
            }
 
            @Override
            public boolean hasPrevious() {
-               return page > 0;
+               return page > 1;
            }
        };
     }

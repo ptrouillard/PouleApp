@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.door;
 
+import com.google.common.base.Stopwatch;
 import com.pedro.raspberry.poule.audit.AuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.concurrent.TimeUnit;
 
 @Controller
 public class DoorController {
@@ -20,56 +23,88 @@ public class DoorController {
     private DoorService service;
 
     @Autowired
+    private DoorRepository repository;
+
+    @Autowired
     private AuditService auditService;
 
     @GetMapping("/door")
     public String door(Model model) {
-        DoorCommand doorCommand = prepareDoorCommand(0L);
-        model.addAttribute("door", doorCommand);
+        Door door = loadDoor();
+        model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/stepup")
-    public String stepup(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+    public String stepup(Model model) {
         auditService.audit("Door moved upwards");
-        service.stepUp(doorCommand.getTime());
-        model.addAttribute("timeDone", doorCommand.getTime());
-        model.addAttribute("door", doorCommand);
+        Door door = loadDoor();
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        service.stepUp(door.getOpenStepTime());
+        stopwatch.stop();
+        model.addAttribute("timeDone", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/stepdown")
-    public String stepdown(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+    public String stepdown(Model model) {
         auditService.audit("Door moved downwards");
-        service.stepDown(doorCommand.getTime());
-        model.addAttribute("timeDone", doorCommand.getTime());
-        model.addAttribute("door", doorCommand);
+        Door door = loadDoor();
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        service.stepDown(door.getCloseStepTime());
+        stopwatch.stop();
+        model.addAttribute("timeDone", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/open")
-    public String open(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+    public String open(Model model) {
         auditService.audit("Door is opened");
-        service.stepUp(doorCommand.getTime2());
-        model.addAttribute("timeDone", doorCommand.getTime2());
-        model.addAttribute("door", doorCommand);
+        Door door = loadDoor();
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        service.stepUp(door.getOpenTime());
+        stopwatch.stop();
+        model.addAttribute("timeDone", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/close")
-    public String close(Model model, @ModelAttribute("door") DoorCommand doorCommand) {
+    public String close(Model model) {
         auditService.audit("Door is closed");
-        service.stepDown(doorCommand.getTime3());
-        model.addAttribute("timeDone", doorCommand.getTime3());
-        model.addAttribute("door", doorCommand);
+        Door door = loadDoor();
+
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        service.stepDown(door.getCloseTime());
+        stopwatch.stop();
+        model.addAttribute("timeDone", stopwatch.elapsed(TimeUnit.MILLISECONDS));
+        model.addAttribute("door", door);
         return "door";
     }
 
-    private DoorCommand prepareDoorCommand(long timeDone) {
-        DoorCommand doorCommand = new DoorCommand();
-        doorCommand.setTime(DoorConstants.Step.getTime());
-        doorCommand.setTime2(DoorConstants.Open.getTime());
-        doorCommand.setTime3(DoorConstants.Close.getTime());
-        return doorCommand;
+    @PostMapping("/door/save")
+    public String save(Model model, @ModelAttribute("door") Door doorCommand) {
+        auditService.audit("Door configuration is saved");
+        repository.save(doorCommand);
+        model.addAttribute("door", loadDoor());
+        model.addAttribute("doorSaved", true);
+        return "door";
+    }
+
+    private Door loadDoor() {
+
+        // get config from database if exists
+        Door doorConfig = repository.findById(1);
+        if (doorConfig == null) {
+            doorConfig = new Door(1, DoorConstants.Close.getTime(), DoorConstants.Open.getTime(), DoorConstants.Step.getTime(), DoorConstants.Step.getTime());
+            repository.save(doorConfig);
+            doorConfig = repository.findById(1);
+        }
+        return doorConfig;
     }
 }

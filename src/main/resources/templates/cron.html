@@ -12,6 +12,8 @@
 
     <div class="mx-auto p-2">
 
+        <h2 th:text="#{cron.title}"></h2>
+
         <div class="alert alert-success" role="alert" th:if="${ info != null}">
             <span th:text="#{${info}}"/>
         </div>

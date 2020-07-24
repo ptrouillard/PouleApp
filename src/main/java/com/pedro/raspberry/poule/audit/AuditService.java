@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,7 @@ public class AuditService {
     @Autowired
     private AuditRepository repository;
 
+    @Transactional
     public void audit(String comment) {
         repository.save(new Audit(new Date(), comment));
     }

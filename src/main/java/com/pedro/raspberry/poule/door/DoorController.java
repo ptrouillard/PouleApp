@@ -2,6 +2,7 @@ package com.pedro.raspberry.poule.door;
 
 import com.google.common.base.Stopwatch;
 import com.pedro.raspberry.poule.audit.AuditService;
+import com.pedro.raspberry.poule.remoteAddr.RemoteAddrHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,48 +39,48 @@ public class DoorController {
     }
 
     @PostMapping("/door/stepup")
-    public String stepup(Model model, HttpServletRequest request) {
+    public String stepup(Model model) {
         Door door = loadDoor();
 
-        long elapsed = service.stepUp(door.getOpenStepTime(), request.getRemoteAddr());
+        long elapsed = service.stepUp(door.getOpenStepTime());
         model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/stepdown")
-    public String stepdown(Model model, HttpServletRequest request) {
+    public String stepdown(Model model) {
         Door door = loadDoor();
 
-        long elapsed = service.stepDown(door.getCloseStepTime(), request.getRemoteAddr());
+        long elapsed = service.stepDown(door.getCloseStepTime());
         model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/open")
-    public String open(Model model, HttpServletRequest request) {
+    public String open(Model model) {
         Door door = loadDoor();
 
-        long elapsed = service.stepUp(door.getOpenTime(), request.getRemoteAddr());
+        long elapsed = service.stepUp(door.getOpenTime());
         model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/close")
-    public String close(Model model, HttpServletRequest request) {
+    public String close(Model model) {
         Door door = loadDoor();
 
-        long elapsed = service.stepDown(door.getCloseTime(), request.getRemoteAddr());
+        long elapsed = service.stepDown(door.getCloseTime());
         model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
         return "door";
     }
 
     @PostMapping("/door/save")
-    public String save(Model model, @ModelAttribute("door") Door doorCommand, HttpServletRequest request) {
-        auditService.audit("audit.configuration.saved", request.getRemoteAddr());
+    public String save(Model model, @ModelAttribute("door") Door doorCommand) {
+        auditService.audit("audit.configuration.saved", RemoteAddrHolder.get());
         repository.save(doorCommand);
         model.addAttribute("door", loadDoor());
         model.addAttribute("doorSaved", true);

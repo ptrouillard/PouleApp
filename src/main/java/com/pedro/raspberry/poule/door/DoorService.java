@@ -3,6 +3,7 @@ package com.pedro.raspberry.poule.door;
 import com.google.common.base.Stopwatch;
 import com.pedro.raspberry.poule.audit.AuditService;
 import com.pedro.raspberry.poule.door.local.LocalDoorAdapter;
+import com.pedro.raspberry.poule.remoteAddr.RemoteAddrHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class DoorService {
     @Autowired
     private DoorAdapter doorAdapter;
 
-    public long stepUp(long ms, String remoteAddr) {
-        auditService.audit("audit.door.opening.invoked", remoteAddr);
+    public long stepUp(long ms) {
+        auditService.audit("audit.door.opening.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             doorAdapter.stepUp(ms);
@@ -30,12 +31,12 @@ public class DoorService {
             stopwatch.stop();
         }
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        auditService.audit("audit.door.opening.finished", elapsed, remoteAddr);
+        auditService.audit("audit.door.opening.finished", elapsed, RemoteAddrHolder.get());
         return elapsed;
     }
 
-    public long stepDown(long ms, String remoteAddr) {
-        auditService.audit("audit.door.closing.invoked", remoteAddr);
+    public long stepDown(long ms) {
+        auditService.audit("audit.door.closing.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             doorAdapter.stepDown(ms);
@@ -43,7 +44,7 @@ public class DoorService {
             stopwatch.stop();
         }
         long elapsed = stopwatch.elapsed(TimeUnit.MILLISECONDS);
-        auditService.audit("audit.door.closing.finished", elapsed, remoteAddr);
+        auditService.audit("audit.door.closing.finished", elapsed, RemoteAddrHolder.get());
         return elapsed;
     }
 }

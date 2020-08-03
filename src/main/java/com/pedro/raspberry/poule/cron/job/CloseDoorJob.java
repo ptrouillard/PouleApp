@@ -2,6 +2,7 @@ package com.pedro.raspberry.poule.cron.job;
 
 import com.pedro.raspberry.poule.door.DoorConstants;
 import com.pedro.raspberry.poule.door.DoorService;
+import com.pedro.raspberry.poule.remoteAddr.RemoteAddrHolder;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -26,6 +27,7 @@ public class CloseDoorJob implements Job {
 
         logger.info("CloseDoorJob called.");
         DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
-        doorService.stepDown(DoorConstants.Close.getTime(), "local");
+        RemoteAddrHolder.set("cron");
+        doorService.stepDown(DoorConstants.Close.getTime());
     }
 }

@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Poule supervision</title>
+    <meta http-equiv="Content-Type" content="text/html;" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+    <nav th:replace="fragments/nav :: page(module='supervision')">...</nav>
+
+    <div class="mx-auto p-2">
+
+        <h2 th:text="#{supervision.title}"></h2>
+
+            <div class="form-group">
+                <label for="CpuTemperature" th:text="#{supervision.cpu.temperature}"/>
+                <span th:text="${CpuTemperature}"/>
+            </div>
+            <div class="form-group">
+                <label for="CpuCoreVoltage" th:text="#{supervision.cpu.corevoltage}"/>
+                <span th:text="${CpuCoreVoltage}"/>
+            </div>
+            <div class="form-group">
+                <label for="MemoryFree" th:text="#{supervision.cpu.memoryfree}"/>
+                <span th:text="${MemoryFree}"/>
+            </div>
+    </div>
+</body>
+</html>

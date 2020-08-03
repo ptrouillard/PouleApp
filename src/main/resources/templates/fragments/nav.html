@@ -27,6 +27,9 @@
         <li class="nav-item" th:classappend="${module == 'audit' ? 'disabled' : ''}">
             <a class="nav-link" href="/audit?pageNumber=1"><span th:text="#{nav.audit}"/></a>
         </li>
+        <li class="nav-item" th:classappend="${module == 'supervision' ? 'disabled' : ''}">
+            <a class="nav-link" href="/supervision"><span th:text="#{nav.supervision}"/></a>
+        </li>
     </ul>
 
     <div class="collapse navbar-collapse" id="navbarNav">

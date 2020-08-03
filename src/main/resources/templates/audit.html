@@ -22,15 +22,19 @@
                 <th scope="col" th:text="#{audit.action}">action</th>
                 <th scope="col" th:text="#{audit.time}">Temps passé</th>
                 <th scope="col" th:text="#{audit.caller}">Appelant</th>
+                <th scope="col" th:text="#{audit.oldValue}">Ancienne valeur</th>
+                <th scope="col" th:text="#{audit.newValue}">Nouvelle valeur</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="audit : ${currentPage.content}">
-                    <th scope="row" th:text="${audit.id}">Id</th>
-                    <td th:text="${audit.date}">Date</td>
-                    <td th:text="#{${audit.comment}}">Action</td>
-                    <td th:text="${audit.time}">Time</td>
-                    <td th:text="${audit.remoteAddr}">Remote</td>
+                    <th scope="row" th:text="${audit.id}">-</th>
+                    <td th:text="${audit.date}">-</td>
+                    <td th:text="#{${audit.comment}}">-</td>
+                    <td th:text="${audit.time}">-</td>
+                    <td th:text="${audit.remoteAddr}">-</td>
+                    <td th:text="${audit.oldValue}">-</td>
+                    <td th:text="${audit.newValue}">-</td>
                 </tr>
             </tbody>
         </table>

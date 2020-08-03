@@ -20,9 +20,6 @@ public class ConfigController {
     @Autowired
     private ConfigService service;
 
-    @Autowired
-    private AuditService auditService;
-
 
     @GetMapping("/config")
     public String config(Model model) {
@@ -34,7 +31,6 @@ public class ConfigController {
     @PostMapping("/config/save")
     public String save(Model model, @ModelAttribute ConfigCommand command) {
         try {
-            auditService.audit("config has been modified");
             service.save(command.getUrl());
             model.addAttribute("config", prepareCommand());
             model.addAttribute("info", "config.info.saved");

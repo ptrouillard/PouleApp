@@ -78,8 +78,8 @@ public class DoorController {
     }
 
     @PostMapping("/door/save")
-    public String save(Model model, @ModelAttribute("door") Door doorCommand) {
-        auditService.audit("audit.configuration.saved");
+    public String save(Model model, @ModelAttribute("door") Door doorCommand, HttpServletRequest request) {
+        auditService.audit("audit.configuration.saved", request.getRemoteAddr());
         repository.save(doorCommand);
         model.addAttribute("door", loadDoor());
         model.addAttribute("doorSaved", true);

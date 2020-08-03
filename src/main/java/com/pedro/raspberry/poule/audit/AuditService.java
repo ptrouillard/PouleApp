@@ -39,6 +39,11 @@ public class AuditService {
         repository.save(new Audit(new Date(), comment, time, remoteAddr));
     }
 
+    @Transactional
+    public void audit(String comment, String oldValue, String newValue) {
+        repository.save(new Audit(new Date(), comment, 0L, null, oldValue, newValue));
+    }
+
     private Pageable getPageable(final int page) {
        return new Pageable() {
            @Override

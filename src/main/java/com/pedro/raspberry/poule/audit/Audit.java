@@ -24,6 +24,10 @@ public class Audit {
 
     private String remoteAddr;
 
+    private String oldValue;
+
+    private String newValue;
+
     public Audit(Date date, String comment) {
         this.date = date;
         this.comment = comment;
@@ -40,6 +44,15 @@ public class Audit {
         this.comment = comment;
         this.time = time;
         this.remoteAddr = remoteAddr;
+    }
+
+    public Audit(Date date, String comment, long time, String remoteAddr, String oldValue, String newValue) {
+        this.date = date;
+        this.comment = comment;
+        this.time = time;
+        this.remoteAddr = remoteAddr;
+        this.oldValue = oldValue;
+        this.newValue = newValue;
     }
 
     protected Audit() {
@@ -79,6 +92,22 @@ public class Audit {
 
     public void setRemoteAddr(String remoteAddr) {
         this.remoteAddr = remoteAddr;
+    }
+
+    public String getOldValue() {
+        return oldValue;
+    }
+
+    public void setOldValue(String oldValue) {
+        this.oldValue = oldValue;
+    }
+
+    public String getNewValue() {
+        return newValue;
+    }
+
+    public void setNewValue(String newValue) {
+        this.newValue = newValue;
     }
 
     @Override

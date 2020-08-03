@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.cron;
 
+import com.pedro.raspberry.poule.audit.AuditService;
 import com.pedro.raspberry.poule.cron.job.CloseDoorJob;
 import com.pedro.raspberry.poule.cron.job.OpenDoorJob;
 import com.pedro.raspberry.poule.door.DoorService;
@@ -31,6 +32,9 @@ public class CronService {
 
     @Autowired
     private DoorService doorService;
+
+    @Autowired
+    private AuditService auditService;
 
     @PostConstruct
     public void initScheduler() throws SchedulerException {
@@ -72,6 +76,9 @@ public class CronService {
     }
 
     public void scheduleOpening(String expression) throws SchedulerException {
+
+        auditService.audit("audit.open.scheduling.invoked", currentOpenExpression, expression);
+
         if (currentOpenExpression.equals(expression)) {
             logger.warn("expression is the same, nothing to be done for open trigger.");
             return;
@@ -87,9 +94,15 @@ public class CronService {
             sched.scheduleJob(openJob, openTrigger);
             logger.info("open job scheduled again with new expression {}", expression);
         }
+
+        auditService.audit("audit.open.scheduling.finished");
+
     }
 
     public void scheduleClosing(String expression) throws SchedulerException {
+
+        auditService.audit("audit.close.scheduling.invoked", currentCloseExpression, expression);
+
         if (currentCloseExpression.equals(expression)) {
             logger.warn("expression is the same, nothing to be done for close trigger.");
             return;
@@ -105,15 +118,19 @@ public class CronService {
             sched.scheduleJob(closeJob, closeTrigger);
             logger.info("close job scheduled again with new expression {}", expression);
         }
+
+        auditService.audit("audit.close.scheduling.finished");
     }
 
-    public void pauseScheduler() throws SchedulerException {
+    public void pauseScheduler(String remoteAddr) throws SchedulerException {
+        auditService.audit("audit.scheduling.pause", remoteAddr);
         logger.info("The scheduler has been paused. No job will be executed");
         if (!sched.isInStandbyMode())
             sched.standby();
     }
 
-    public void resumeScheduler() throws SchedulerException {
+    public void resumeScheduler(String remoteAddr) throws SchedulerException {
+        auditService.audit("audit.scheduling.resume", remoteAddr);
         logger.info("The scheduler has been resumed.");
         if (sched.isInStandbyMode())
             sched.start();

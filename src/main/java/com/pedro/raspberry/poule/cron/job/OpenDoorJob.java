@@ -25,6 +25,6 @@ public class OpenDoorJob implements Job {
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         logger.info("OpenDoorJob called.");
         DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
-        doorService.stepUp(DoorConstants.Close.getTime());
+        doorService.stepUp(DoorConstants.Close.getTime(), "local");
     }
 }

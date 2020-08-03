@@ -15,6 +15,6 @@ public class CamController {
     @GetMapping("/cam")
     public String dashboard(Model model) {
         model.addAttribute("url", configService.getWebcamUrl());
-        return "cam";
+        return "redirect:" + configService.getWebcamUrl();
     }
 }

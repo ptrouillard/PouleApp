@@ -1,22 +1,30 @@
-package com.pedro.raspberry.poule.door;
+package com.pedro.raspberry.poule.door.local;
 
-import com.pi4j.io.gpio.*;
-import com.pi4j.wiringpi.SoftPwm;
+import com.pedro.raspberry.poule.door.DoorAdapter;
+import com.pedro.raspberry.poule.door.DoorUsedPins;
+import com.pi4j.io.gpio.GpioController;
+import com.pi4j.io.gpio.GpioFactory;
+import com.pi4j.io.gpio.GpioPinDigitalOutput;
+import com.pi4j.io.gpio.PinState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
-@Service("doorService")
+@Service("doorAdapter")
 @Profile("prod")
-public class GPIODoorService implements DoorService {
+public class LocalDoorAdapter implements DoorAdapter {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+    private static Logger logger = LoggerFactory.getLogger(LocalDoorAdapter.class.getName());
 
-    private Optional<Pins> physical = Optional.empty();
+    private Optional<LocalDoorAdapter.Pins> physical = Optional.empty();
+
+    @Autowired
+    private DoorAdapter doorAdapter;
 
     private class Pins {
         public GpioController gpio;
@@ -65,7 +73,9 @@ public class GPIODoorService implements DoorService {
         }
     }
 
+    @Override
     public void stepUp(final long ms) {
+
         logger.info("stepUp invoked with {} ms", ms);
         physical.ifPresent( p -> {
             try {
@@ -81,7 +91,9 @@ public class GPIODoorService implements DoorService {
         });
     }
 
+    @Override
     public void stepDown(long ms) {
+
         logger.info("stepDown invoked with {} ms", ms);
         physical.ifPresent( p -> {
             try {

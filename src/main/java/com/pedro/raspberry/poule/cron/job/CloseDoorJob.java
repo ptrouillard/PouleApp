@@ -26,6 +26,6 @@ public class CloseDoorJob implements Job {
 
         logger.info("CloseDoorJob called.");
         DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
-        doorService.stepDown(DoorConstants.Close.getTime());
+        doorService.stepDown(DoorConstants.Close.getTime(), "local");
     }
 }

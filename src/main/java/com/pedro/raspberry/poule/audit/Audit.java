@@ -20,9 +20,26 @@ public class Audit {
 
     private Date date;
 
+    private Long time;
+
+    private String remoteAddr;
+
     public Audit(Date date, String comment) {
         this.date = date;
         this.comment = comment;
+    }
+
+    public Audit(Date date, String comment, long time) {
+        this.date = date;
+        this.comment = comment;
+        this.time = time;
+    }
+
+    public Audit(Date date, String comment, long time, String remoteAddr) {
+        this.date = date;
+        this.comment = comment;
+        this.time = time;
+        this.remoteAddr = remoteAddr;
     }
 
     protected Audit() {
@@ -48,12 +65,30 @@ public class Audit {
         return id;
     }
 
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
+
+    public String getRemoteAddr() {
+        return remoteAddr;
+    }
+
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
+    }
+
     @Override
     public String toString() {
         return "Audit{" +
                 "id=" + id +
                 ", comment='" + comment + '\'' +
                 ", date=" + date +
+                ", time=" + time +
+                ", remoteAddr='" + remoteAddr + '\'' +
                 '}';
     }
 }

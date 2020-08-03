@@ -17,16 +17,20 @@
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">action</th>
+                <th scope="col" th:text="#{audit.sharp}">#</th>
+                <th scope="col" th:text="#{audit.date}">Date</th>
+                <th scope="col" th:text="#{audit.action}">action</th>
+                <th scope="col" th:text="#{audit.time}">Temps passé</th>
+                <th scope="col" th:text="#{audit.caller}">Appelant</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="audit : ${currentPage.content}">
                     <th scope="row" th:text="${audit.id}">Id</th>
                     <td th:text="${audit.date}">Date</td>
-                    <td th:text="${audit.comment}">Action</td>
+                    <td th:text="#{${audit.comment}}">Action</td>
+                    <td th:text="${audit.time}">Time</td>
+                    <td th:text="${audit.remoteAddr}">Remote</td>
                 </tr>
             </tbody>
         </table>

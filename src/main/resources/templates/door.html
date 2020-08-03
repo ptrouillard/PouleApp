@@ -64,24 +64,33 @@
     <div class="mx-auto p-2">
 
         <h2 th:text="#{door.title}"></h2>
-        <div class="alert alert-success" role="alert" th:if="${ timeDone != null}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${ timeDone != null}">
             <span class="fas fa-info-circle">&nbsp;&nbsp;&nbsp;</span>
             <span th:text="#{door.move.done(${timeDone})}"/>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
 
-        <div class="alert alert-success" role="alert" th:if="${ doorSaved == true}">
+        <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${ doorSaved == true}">
             <span class="fas fa-save">&nbsp;&nbsp;&nbsp;</span>
             <span th:text="#{door.save.done}"/>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
 
-        <div class="alert alert-danger" role="alert" th:if="${param.secu_error}">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${param.secu_error}">
             <span class="fas fa-exclamation-triangle">&nbsp;&nbsp;&nbsp;</span>
             <span th:text="#{door.action.notallowed}"/>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
         </div>
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
+                <div class="col-6">
                     <!-- save data only -->
                     <form action="/door/save" method="post" th:object="${door}" id="form_save">
                         <div class="form-group">
@@ -152,8 +161,6 @@
                             </button>
                         </div>
                     </form>
-
-
                 </div>
             </div>
         </div>

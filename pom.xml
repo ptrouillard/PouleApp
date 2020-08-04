@@ -9,7 +9,7 @@
 	</parent>
 	<groupId>com.pedro.raspberry</groupId>
 	<artifactId>poule</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3-SNAPSHOT</version>
 	<name>poule-app</name>
 	<description>Demo project for Spring Boot</description>
 
@@ -20,7 +20,7 @@
 	<!-- for release -->
 	<scm>
 		<developerConnection>scm:git:https://github.com/ptrouillard/PouleApp.git</developerConnection>
-	  <tag>poule-1.0.2</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>

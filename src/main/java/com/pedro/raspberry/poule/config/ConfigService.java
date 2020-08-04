@@ -1,7 +1,6 @@
 package com.pedro.raspberry.poule.config;
 
 import com.pedro.raspberry.poule.audit.AuditService;
-import org.graalvm.compiler.hotspot.GraalHotSpotVMConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

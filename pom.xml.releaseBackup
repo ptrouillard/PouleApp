@@ -11,7 +11,7 @@
 	<groupId>com.pedro.raspberry</groupId>
 	<artifactId>poule</artifactId>
 	<version>1.0.1-SNAPSHOT</version>
-	<name>poule-ui</name>
+	<name>poule-app</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>

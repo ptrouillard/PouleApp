@@ -1,7 +1,5 @@
-package com.pedro.raspberry.poule.door.local;
+package com.pedro.raspberry.poule.api;
 
-import com.pedro.raspberry.poule.door.DoorAdapter;
-import com.pedro.raspberry.poule.door.DoorUsedPins;
 import com.pi4j.io.gpio.GpioController;
 import com.pi4j.io.gpio.GpioFactory;
 import com.pi4j.io.gpio.GpioPinDigitalOutput;
@@ -15,13 +13,13 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.util.Optional;
 
-@Service("doorAdapter")
+@Service("doorAdapterImpl")
 @Profile("prod")
-public class LocalDoorAdapter implements DoorAdapter {
+public class DoorAdapterImpl implements DoorAdapter {
 
-    private static Logger logger = LoggerFactory.getLogger(LocalDoorAdapter.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(DoorAdapterImpl.class.getName());
 
-    private Optional<LocalDoorAdapter.Pins> physical = Optional.empty();
+    private Optional<Pins> physical = Optional.empty();
 
     @Autowired
     private DoorAdapter doorAdapter;

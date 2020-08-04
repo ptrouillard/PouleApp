@@ -1,4 +1,4 @@
-package com.pedro.raspberry.poule.door;
+package com.pedro.raspberry.poule.api;
 
 public interface DoorAdapter {
     void stepUp(long ms);

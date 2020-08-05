@@ -40,6 +40,12 @@
             <version>1.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.pedro.raspberry</groupId>
+            <artifactId>PouleAppAdapter</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>

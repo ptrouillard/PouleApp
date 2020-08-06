@@ -16,8 +16,6 @@ public class SecurityInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String secu = request.getParameter("secu");
 
-        logger.info("Security code received : " + secu);
-
         if (request.getServletPath().startsWith("/door") && "post".equalsIgnoreCase(request.getMethod())) {
             if (!"/door/save".equals(request.getServletPath())) {
                 logger.info("Security code received : " + secu);

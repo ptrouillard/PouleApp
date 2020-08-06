@@ -17,14 +17,7 @@ public class SupervisionController {
 
     @GetMapping("/supervision")
     public String supervision(Model model) throws IOException, InterruptedException {
-
-        model.addAttribute(SupervisionInsight.CpuTemperature.name(),
-                supervisionAdapter.getInsight(SupervisionInsight.CpuTemperature));
-        model.addAttribute(SupervisionInsight.CpuCoreVoltage.name(),
-                supervisionAdapter.getInsight(SupervisionInsight.CpuCoreVoltage));
-        model.addAttribute(SupervisionInsight.MemoryFree.name(),
-                supervisionAdapter.getInsight(SupervisionInsight.MemoryFree));
-
+        model.addAttribute("insights", supervisionAdapter.getInsights());
         return "supervision";
     }
 }

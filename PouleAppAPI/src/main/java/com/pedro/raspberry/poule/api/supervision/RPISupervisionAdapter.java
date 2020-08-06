@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.api.supervision;
 
+import com.pedro.raspberry.poule.adapter.supervision.Insight;
 import com.pedro.raspberry.poule.adapter.supervision.SupervisionAdapter;
 import com.pedro.raspberry.poule.adapter.supervision.SupervisionInsight;
 import com.pi4j.system.SystemInfo;
@@ -12,15 +13,13 @@ import java.io.IOException;
 @Profile("prod")
 public class RPISupervisionAdapter implements SupervisionAdapter {
 
-    public String getInsight(SupervisionInsight key) throws IOException, InterruptedException {
+    @Override
+    public Insight getInsights() throws IOException, InterruptedException {
 
-        float value;
-        switch(key) {
-            case CpuTemperature : value = SystemInfo.getCpuTemperature(); break;
-            case CpuCoreVoltage : value = SystemInfo.getCpuVoltage(); break;
-            case MemoryFree : value = SystemInfo.getMemoryFree(); break;
-            default: value= -1f;
-        }
-       return Float.toString(value);
+        Insight insight = new Insight(Float.toString(SystemInfo.getCpuTemperature()),
+                Float.toString(SystemInfo.getCpuVoltage()),
+                Float.toString(SystemInfo.getMemoryFree()));
+
+        return insight;
     }
 }

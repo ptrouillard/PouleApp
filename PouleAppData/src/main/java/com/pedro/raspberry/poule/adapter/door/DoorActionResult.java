@@ -1,4 +1,4 @@
-package com.pedro.raspberry.poule.api.door;
+package com.pedro.raspberry.poule.adapter.door;
 
 public class DoorActionResult {
     private boolean result;
@@ -10,6 +10,9 @@ public class DoorActionResult {
 
     public static DoorActionResult error(String message) {
         return new DoorActionResult(false, message);
+    }
+
+    protected DoorActionResult() {
     }
 
     private DoorActionResult(boolean result) {

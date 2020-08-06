@@ -16,15 +16,15 @@
 
             <div class="form-group">
                 <label for="CpuTemperature" th:text="#{supervision.cpu.temperature}"/>
-                <span th:text="${CpuTemperature}"/>
+                <span th:text="${insights.cpuTemperature}"/>
             </div>
             <div class="form-group">
                 <label for="CpuCoreVoltage" th:text="#{supervision.cpu.corevoltage}"/>
-                <span th:text="${CpuCoreVoltage}"/>
+                <span th:text="${insights.cpuVoltage}"/>
             </div>
             <div class="form-group">
                 <label for="MemoryFree" th:text="#{supervision.cpu.memoryfree}"/>
-                <span th:text="${MemoryFree}"/>
+                <span th:text="${insights.freeMemory}"/>
             </div>
     </div>
 </body>

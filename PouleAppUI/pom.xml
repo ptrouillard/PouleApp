@@ -83,7 +83,7 @@
 
         <dependency>
             <groupId>com.pedro.raspberry</groupId>
-            <artifactId>PouleAppAdapter</artifactId>
+            <artifactId>PouleAppData</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 

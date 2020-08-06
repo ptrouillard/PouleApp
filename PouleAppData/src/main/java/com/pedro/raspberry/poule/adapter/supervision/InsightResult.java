@@ -1,4 +1,4 @@
-package com.pedro.raspberry.poule.api.supervision;
+package com.pedro.raspberry.poule.adapter.supervision;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,18 +6,22 @@ import java.util.Map;
 public class InsightResult {
     private boolean result;
     private String message;
-    private Map<String, String> insights = new HashMap<>();
+    private Insight insight;
 
-    public static InsightResult success() {
-        return new InsightResult(true);
+    public static InsightResult success(Insight insight) {
+        return new InsightResult(true, insight);
     }
 
     public static InsightResult error(String message) {
         return new InsightResult(false, message);
     }
 
-    private InsightResult(boolean result) {
+    protected InsightResult() {
+    }
+
+    private InsightResult(boolean result, Insight insight) {
         this.result = result;
+        this.insight = insight;
     }
 
     private InsightResult(boolean result, String message) {
@@ -33,8 +37,11 @@ public class InsightResult {
         return message;
     }
 
-    public InsightResult withInsight(String key, String value) {
-        insights.put(key, value);
-        return this;
+    public Insight getInsight() {
+        return insight;
+    }
+
+    public void setInsight(Insight insight) {
+        this.insight = insight;
     }
 }

@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.api.door;
 
+import com.pedro.raspberry.poule.adapter.door.DoorActionResult;
 import com.pedro.raspberry.poule.adapter.door.DoorAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

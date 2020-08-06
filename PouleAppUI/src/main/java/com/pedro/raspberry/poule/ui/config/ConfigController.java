@@ -19,35 +19,30 @@ public class ConfigController {
     @Autowired
     private ConfigService service;
 
-
     @GetMapping("/config")
     public String config(Model model) {
-        model.addAttribute("config", prepareCommand());
-        prepareAttributes(model);
+        model.addAttribute("config", prepareConfig());
         return "config";
     }
 
     @PostMapping("/config/save")
-    public String save(Model model, @ModelAttribute ConfigCommand command) {
+    public String save(Model model, @ModelAttribute Config command) {
         try {
-            service.save(command.getUrl());
-            model.addAttribute("config", prepareCommand());
+            service.save(command);
+            model.addAttribute("config", prepareConfig());
             model.addAttribute("info", "config.info.saved");
         } catch (IOException e) {
             logger.error("Error occured while saving configuration", e);
             model.addAttribute("error", "config.error.saved");
         }
-        prepareAttributes(model);
         return "config";
     }
 
-    private void prepareAttributes(Model model) {
-        model.addAttribute("url", service.getWebcamUrl());
-    }
-
-    private ConfigCommand prepareCommand() {
-        ConfigCommand command = new ConfigCommand();
-        command.setUrl(service.getWebcamUrl());
+    private Config prepareConfig() {
+        Config command = new Config();
+        command.setWebcamUrl(service.getWebcamUrl());
+        command.setApiSupervisionUrl(service.getSupervisionUrl());
+        command.setApiDoorUrl(service.getDoorUrl());
         return command;
     }
 }

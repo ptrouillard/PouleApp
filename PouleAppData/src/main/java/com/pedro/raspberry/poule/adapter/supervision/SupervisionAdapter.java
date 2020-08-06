@@ -1,7 +1,7 @@
 package com.pedro.raspberry.poule.adapter.supervision;
 
-import java.io.IOException;
+import java.util.Optional;
 
 public interface SupervisionAdapter {
-    Insight getInsights() throws IOException, InterruptedException;
+    Optional<Insight> getInsights();
 }

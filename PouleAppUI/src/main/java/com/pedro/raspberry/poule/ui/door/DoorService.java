@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.ConnectException;
 import java.util.concurrent.TimeUnit;
 
 @Service("doorService")
@@ -22,11 +23,13 @@ public class DoorService {
     @Autowired
     private DoorAdapter doorAdapter;
 
-    public long stepUp(long ms) {
+    public long up(long ms) {
         auditService.audit("audit.door.opening.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             doorAdapter.stepUp(ms);
+        } catch (Exception e) {
+            throw e;
         } finally {
             stopwatch.stop();
         }
@@ -35,11 +38,13 @@ public class DoorService {
         return elapsed;
     }
 
-    public long stepDown(long ms) {
+    public long down(long ms) {
         auditService.audit("audit.door.closing.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();
         try {
             doorAdapter.stepDown(ms);
+        } catch (Exception e) {
+            throw e;
         } finally {
             stopwatch.stop();
         }

@@ -1,5 +1,6 @@
 package com.pedro.raspberry.poule.ui.supervision;
 
+import com.pedro.raspberry.poule.adapter.supervision.Insight;
 import com.pedro.raspberry.poule.adapter.supervision.SupervisionAdapter;
 import com.pedro.raspberry.poule.adapter.supervision.SupervisionInsight;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,13 @@ public class SupervisionController {
 
     @GetMapping("/supervision")
     public String supervision(Model model) throws IOException, InterruptedException {
-        model.addAttribute("insights", supervisionAdapter.getInsights());
+
+        supervisionAdapter.getInsights().ifPresentOrElse( insight -> {
+            model.addAttribute("insights", insight);
+        }, () -> {
+            model.addAttribute("error", "supervision.error");
+            model.addAttribute("insights", Insight.error());
+        });
         return "supervision";
     }
 }

@@ -2,7 +2,6 @@ package com.pedro.raspberry.poule.ui.door.remote;
 
 import com.pedro.raspberry.poule.adapter.door.DoorActionResult;
 import com.pedro.raspberry.poule.adapter.door.DoorAdapter;
-import com.pedro.raspberry.poule.adapter.supervision.InsightResult;
 import com.pedro.raspberry.poule.ui.config.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,12 +11,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-
 
 @Component("doorAdapterRemote")
 @Profile("prod")
@@ -30,19 +24,17 @@ public class RemoteDoorAdapter implements DoorAdapter {
 
     @Override
     public void stepUp(final long ms) {
-
         String url =service.getDoorUrl()+"/up?ms=" + ms;
-        doorcall(url);
+        doorCall(url);
     }
 
     @Override
     public void stepDown(long ms) {
-        logger.info("api call invoked with parameter ?ms='{}'", ms);
         String url = service.getDoorUrl()+"/down?ms=" + ms;
-        doorcall(url);
+        doorCall(url);
     }
 
-    private void doorcall(String url) {
+    private void doorCall(String url) {
 
         logger.info("api call '{}' invoked", url);
 

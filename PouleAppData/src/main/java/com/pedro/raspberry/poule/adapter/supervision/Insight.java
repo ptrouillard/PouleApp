@@ -14,6 +14,10 @@ public class Insight {
         this.freeMemory = freeMemory;
     }
 
+    public static Insight error() {
+        return new Insight("NC (error)", "NC (error)", "NC (error)");
+    }
+
     public String getCpuTemperature() {
         return cpuTemperature;
     }

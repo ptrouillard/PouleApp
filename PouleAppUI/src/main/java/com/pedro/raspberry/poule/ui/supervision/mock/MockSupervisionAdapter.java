@@ -5,14 +5,14 @@ import com.pedro.raspberry.poule.adapter.supervision.SupervisionAdapter;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @Profile("default")
 public class MockSupervisionAdapter implements SupervisionAdapter {
 
     @Override
-    public Insight getInsights() throws IOException, InterruptedException {
-        return new Insight("NC (mock)", "NC (mock)", "NC (mock)");
+    public Optional<Insight> getInsights() {
+        return Optional.of(new Insight("NC (mock)", "NC (mock)", "NC (mock)"));
     }
 }

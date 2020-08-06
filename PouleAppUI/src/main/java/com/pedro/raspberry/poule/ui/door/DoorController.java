@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.net.ConnectException;
+
 @Controller
 public class DoorController {
 
@@ -36,40 +38,56 @@ public class DoorController {
     @PostMapping("/door/stepup")
     public String stepup(Model model) {
         Door door = loadDoor();
-
-        long elapsed = service.stepUp(door.getOpenStepTime());
-        model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
+
+        try {
+            long elapsed = service.up(door.getOpenStepTime());
+            model.addAttribute("timeDone", elapsed);
+        } catch (Exception e) {
+            model.addAttribute("error", "door.error");
+        }
         return "door";
     }
 
     @PostMapping("/door/stepdown")
     public String stepdown(Model model) {
         Door door = loadDoor();
-
-        long elapsed = service.stepDown(door.getCloseStepTime());
-        model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
+
+        try {
+            long elapsed = service.down(door.getCloseStepTime());
+            model.addAttribute("timeDone", elapsed);
+        } catch (Exception e) {
+            model.addAttribute("error", "door.error");
+        }
         return "door";
     }
 
     @PostMapping("/door/open")
     public String open(Model model) {
         Door door = loadDoor();
-
-        long elapsed = service.stepUp(door.getOpenTime());
-        model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
+
+        try {
+            long elapsed = service.up(door.getOpenTime());
+            model.addAttribute("timeDone", elapsed);
+        } catch (Exception e) {
+            model.addAttribute("error", "door.error");
+        }
         return "door";
     }
 
     @PostMapping("/door/close")
     public String close(Model model) {
         Door door = loadDoor();
-
-        long elapsed = service.stepDown(door.getCloseTime());
-        model.addAttribute("timeDone", elapsed);
         model.addAttribute("door", door);
+
+        try {
+            long elapsed = service.down(door.getCloseTime());
+            model.addAttribute("timeDone", elapsed);
+        } catch (Exception e) {
+            model.addAttribute("error", "door.error");
+        }
         return "door";
     }
 

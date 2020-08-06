@@ -1,7 +1,6 @@
 package com.pedro.raspberry.poule.ui.config;
 
 import com.pedro.raspberry.poule.ui.audit.AuditService;
-import jdk.javadoc.internal.doclets.formats.html.AbstractPackageIndexWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

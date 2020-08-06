@@ -28,6 +28,6 @@ public class CloseDoorJob implements Job {
         logger.info("CloseDoorJob called.");
         DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
         RemoteAddrHolder.set("cron");
-        doorService.stepDown(DoorConstants.Close.getTime());
+        doorService.down(DoorConstants.Close.getTime());
     }
 }

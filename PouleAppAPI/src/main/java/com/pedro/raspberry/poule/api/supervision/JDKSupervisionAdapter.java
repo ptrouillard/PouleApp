@@ -7,13 +7,14 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Component
 @Profile("default")
 public class JDKSupervisionAdapter implements SupervisionAdapter {
 
     @Override
-    public Insight getInsights() throws IOException, InterruptedException {
-        return new Insight("NC", "NC", Float.toString(Runtime.getRuntime().freeMemory()));
+    public Optional<Insight> getInsights() {
+        return Optional.of(new Insight("NC", "NC", Float.toString(Runtime.getRuntime().freeMemory())));
     }
 }

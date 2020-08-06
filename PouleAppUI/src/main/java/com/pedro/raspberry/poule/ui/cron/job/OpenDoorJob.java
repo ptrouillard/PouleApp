@@ -27,6 +27,6 @@ public class OpenDoorJob implements Job {
         logger.info("OpenDoorJob called.");
         DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
         RemoteAddrHolder.set("cron");
-        doorService.stepUp(DoorConstants.Close.getTime());
+        doorService.up(DoorConstants.Close.getTime());
     }
 }

@@ -5,14 +5,29 @@
     <meta http-equiv="Content-Type" content="text/html;" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="/js/gauge.min.js" crossorigin="anonymous"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
-</head>
+    <script src="https://kit.fontawesome.com/98f595d35c.js" crossorigin="anonymous"></script>
+    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>-->
+
+
+    </head>
 <body>
     <nav th:replace="fragments/nav :: page(module='supervision')">...</nav>
 
     <div class="mx-auto p-2">
 
         <h2 th:text="#{supervision.title}"></h2>
+
+        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${ error != null}">
+            <span class="fas fa-exclamation-triangle">&nbsp;&nbsp;&nbsp;</span>
+            <span th:text="#{${error}}"/>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
             <div class="form-group">
                 <label for="CpuTemperature" th:text="#{supervision.cpu.temperature}"/>
@@ -26,6 +41,38 @@
                 <label for="MemoryFree" th:text="#{supervision.cpu.memoryfree}"/>
                 <span th:text="${insights.freeMemory}"/>
             </div>
+
+            <canvas id="foo" width="300" height="200" style="width: 300px; height: 200px">foo</canvas>
     </div>
+
+    <script type="text/javascript">
+
+      var opts = {
+          angle: -0.14, // The span of the gauge arc
+          lineWidth: 0.21, // The line thickness
+          radiusScale: 1, // Relative radius
+          pointer: {
+            length: 0.6, // // Relative to gauge radius
+            strokeWidth: 0.035, // The thickness
+            color: '#000000' // Fill color
+          },
+          limitMax: false,     // If false, max value increases automatically if value > maxValue
+          limitMin: false,     // If true, the min value of the gauge will be fixed
+          colorStart: '#6F6EA0',   // Colors
+          colorStop: '#C0C0DB',    // just experiment with them
+          strokeColor: '#EEEEEE',  // to see which ones work best for you
+          generateGradient: true,
+          highDpiSupport: true,     // High resolution support
+
+        };
+        var target = document.getElementById('foo'); // your canvas element
+        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
+        gauge.maxValue = 3000; // set max gauge value
+        gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
+        gauge.animationSpeed = 45; // set animation speed (32 is default value)
+        gauge.set(1375); // set actual value
+
+    </script>
+
 </body>
 </html>

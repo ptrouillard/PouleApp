@@ -36,7 +36,7 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6">
                     <form action="/cron/open" method="post" th:object="${cron}" id="form_open">
                         <div class="form-group">
                             <label for="OpenExpression" th:text="#{cron.open.expression}"/>
@@ -54,7 +54,7 @@
                     <form action="/cron/start" method="post" th:object="${cron}" id="form_start">
                     </form>
                 </div>
-                <div class="col">
+                <div class="col-lg">
                     <div class="form-group">
                         <button type="button" class="btn btn-outline-info" disabled>
                             <div th:if="${schedulerPaused == false}" class="text-success">

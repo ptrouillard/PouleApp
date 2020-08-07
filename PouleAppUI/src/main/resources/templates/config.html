@@ -26,22 +26,28 @@
             <span th:text="#{${error}}"/>
         </div>
 
-        <form action="/config/save" method="post" th:object="${config}" id="form_config">
-            <div class="form-group">
-                <label for="CamUrl" th:text="#{config.cam.url}"/>
-                <input type="text" th:field="*{webcamUrl}" class="form-control" size=10/>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4">
+                    <form action="/config/save" method="post" th:object="${config}" id="form_config">
+                        <div class="form-group">
+                            <label for="CamUrl" th:text="#{config.cam.url}"/>
+                            <input type="text" th:field="*{webcamUrl}" class="form-control" size=10/>
+                        </div>
+                        <div class="form-group">
+                            <label for="SupervisionUrl" th:text="#{config.supervision.url}"/>
+                            <input type="text" th:field="*{apiSupervisionUrl}" class="form-control" size=10/>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiDoorUrl" th:text="#{config.door.url}"/>
+                            <input type="text" th:field="*{apiDoorUrl}" class="form-control" size=10/>
+                        </div>
+                    </form>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" th:text="#{config.save}" form="form_config">Save config</button>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label for="SupervisionUrl" th:text="#{config.supervision.url}"/>
-                <input type="text" th:field="*{apiSupervisionUrl}" class="form-control" size=10/>
-            </div>
-            <div class="form-group">
-                <label for="apiDoorUrl" th:text="#{config.door.url}"/>
-                <input type="text" th:field="*{apiDoorUrl}" class="form-control" size=10/>
-            </div>
-        </form>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary" th:text="#{config.save}" form="form_config">Save config</button>
         </div>
     </div>
 </body>

@@ -8,9 +8,6 @@
     <script src="/js/gauge.min.js" crossorigin="anonymous"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/98f595d35c.js" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <nav th:replace="fragments/nav :: page(module='supervision')">...</nav>
@@ -47,6 +44,9 @@
                         <div class="card-body">
                             <h5 class="card-title" th:text="#{supervision.cpu.memoryfree}"></h5>
                             <span class="card-text" th:text="${insights.freeMemory}" id="memoryFreeValue"></span>
+                            &nbsp;<span th:text="#{supervision.unit.megaoctets}"/>
+                            /
+                            <span class="card-text" th:text="${insights.totalMemory}" id="totalMemoryValue"></span>
                             &nbsp;<span th:text="#{supervision.unit.megaoctets}"/>
                         </div>
                     </div>
@@ -86,7 +86,7 @@
 
         gauge('CpuTemperatureCanvas', document.getElementById("cpuTemperatureValue").innerHTML, 0, 100);
         gauge('CpuCoreVoltageCanvas', document.getElementById("cpuCoreVoltageValue").innerHTML, 0, 2);
-        gauge('MemoryFreeCanvas', document.getElementById("memoryFreeValue").innerHTML, 0, 100000000);
+        gauge('MemoryFreeCanvas', document.getElementById("memoryFreeValue").innerHTML, 0, document.getElementById("totalMemoryValue").innerHTML);
 
     </script>
 

@@ -4,18 +4,20 @@ public class Insight {
     private String cpuTemperature;
     private String cpuVoltage;
     private String freeMemory;
+    private String totalMemory;
 
     Insight() {
     }
 
-    public Insight(String cpuTemperature, String cpuVoltage, String freeMemory) {
+    public Insight(String cpuTemperature, String cpuVoltage, String freeMemory, String totalMemory) {
         this.cpuTemperature = cpuTemperature;
         this.cpuVoltage = cpuVoltage;
         this.freeMemory = freeMemory;
+        this.totalMemory = totalMemory;
     }
 
     public static Insight error() {
-        return new Insight("NC (error)", "NC (error)", "NC (error)");
+        return new Insight("NC (error)", "NC (error)", "NC (error)", "NC (error)");
     }
 
     public String getCpuTemperature() {
@@ -40,5 +42,13 @@ public class Insight {
 
     public void setFreeMemory(String freeMemory) {
         this.freeMemory = freeMemory;
+    }
+
+    public String getTotalMemory() {
+        return totalMemory;
+    }
+
+    public void setTotalMemory(String totalMemory) {
+        this.totalMemory = totalMemory;
     }
 }

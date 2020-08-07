@@ -13,6 +13,6 @@ public class MockSupervisionAdapter implements SupervisionAdapter {
 
     @Override
     public Optional<Insight> getInsights() {
-        return Optional.of(new Insight("NC (mock)", "NC (mock)", "NC (mock)"));
+        return Optional.of(new Insight("NC (mock)", "NC (mock)", "NC (mock)", "NC (mock)"));
     }
 }

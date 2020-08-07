@@ -14,14 +14,12 @@
 </head>
 <body>
     <nav th:replace="fragments/nav :: page(module='dashboard')">...</nav>
-
     <div class="jumbotron">
         <h1 class="display-4" th:text="#{dashboard.welcome}"></h1>
         <p class="lead" th:text="#{dashboard.lead}"></p>
         <hr class="my-4">
         <p th:text="#{dashboard.main}"></p>
+        <span th:text="#{dashboard.version(${session.version})}"></span>
     </div>
-
-
 </body>
 </html>

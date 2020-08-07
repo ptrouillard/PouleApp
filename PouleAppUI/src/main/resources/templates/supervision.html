@@ -8,12 +8,10 @@
     <script src="/js/gauge.min.js" crossorigin="anonymous"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <script src="https://kit.fontawesome.com/98f595d35c.js" crossorigin="anonymous"></script>
-    <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>-->
-
-
-    </head>
+    <script src="/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</head>
 <body>
     <nav th:replace="fragments/nav :: page(module='supervision')">...</nav>
 
@@ -21,34 +19,46 @@
 
         <h2 th:text="#{supervision.title}"></h2>
 
-        <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${ error != null}">
-            <span class="fas fa-exclamation-triangle">&nbsp;&nbsp;&nbsp;</span>
-            <span th:text="#{${error}}"/>
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+        <div class="flexcontainer">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <canvas id="CpuTemperatureCanvas" width="300" height="200" style="width: 300px; height: 200px">foo</canvas>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="#{supervision.cpu.temperature}"></h5>
+                            <span class="card-text" th:text="${insights.cpuTemperature}" id="cpuTemperatureValue"></span>
+                            &nbsp;<span th:text="#{supervision.unit.celsius}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <canvas id="CpuCoreVoltageCanvas" width="300" height="200" style="width: 300px; height: 200px">foo</canvas>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="#{supervision.cpu.corevoltage}"></h5>
+                            <span class="card-text" th:text="${insights.cpuVoltage}" id="cpuCoreVoltageValue"></span>
+                            &nbsp;<span th:text="#{supervision.unit.volts}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card">
+                        <canvas id="MemoryFreeCanvas" width="300" height="200" style="width: 300px; height: 200px">foo</canvas>
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="#{supervision.cpu.memoryfree}"></h5>
+                            <span class="card-text" th:text="${insights.freeMemory}" id="memoryFreeValue"></span>
+                            &nbsp;<span th:text="#{supervision.unit.megaoctets}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-            <div class="form-group">
-                <label for="CpuTemperature" th:text="#{supervision.cpu.temperature}"/>
-                <span th:text="${insights.cpuTemperature}"/>
-            </div>
-            <div class="form-group">
-                <label for="CpuCoreVoltage" th:text="#{supervision.cpu.corevoltage}"/>
-                <span th:text="${insights.cpuVoltage}"/>
-            </div>
-            <div class="form-group">
-                <label for="MemoryFree" th:text="#{supervision.cpu.memoryfree}"/>
-                <span th:text="${insights.freeMemory}"/>
-            </div>
-
-            <canvas id="foo" width="300" height="200" style="width: 300px; height: 200px">foo</canvas>
     </div>
 
     <script type="text/javascript">
 
       var opts = {
-          angle: -0.14, // The span of the gauge arc
+          angle: 0.15, // The span of the gauge arc
           lineWidth: 0.21, // The line thickness
           radiusScale: 1, // Relative radius
           pointer: {
@@ -58,19 +68,25 @@
           },
           limitMax: false,     // If false, max value increases automatically if value > maxValue
           limitMin: false,     // If true, the min value of the gauge will be fixed
-          colorStart: '#6F6EA0',   // Colors
-          colorStop: '#C0C0DB',    // just experiment with them
+          colorStart: '#6FADCF',   // Colors
+          colorStop: '#8FC0DA',    // just experiment with them
           strokeColor: '#EEEEEE',  // to see which ones work best for you
           generateGradient: true,
           highDpiSupport: true,     // High resolution support
-
         };
-        var target = document.getElementById('foo'); // your canvas element
-        var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-        gauge.maxValue = 3000; // set max gauge value
-        gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
-        gauge.animationSpeed = 45; // set animation speed (32 is default value)
-        gauge.set(1375); // set actual value
+
+        var gauge = function(canvas_id, value, min, max) {
+            var target = document.getElementById(canvas_id);
+            var gauge = new Gauge(target).setOptions(opts);
+            gauge.maxValue = max;
+            gauge.setMinValue(min);
+            gauge.animationSpeed = 45;
+            gauge.set(value);
+        }
+
+        gauge('CpuTemperatureCanvas', document.getElementById("cpuTemperatureValue").innerHTML, 0, 100);
+        gauge('CpuCoreVoltageCanvas', document.getElementById("cpuCoreVoltageValue").innerHTML, 0, 2);
+        gauge('MemoryFreeCanvas', document.getElementById("memoryFreeValue").innerHTML, 0, 100000000);
 
     </script>
 

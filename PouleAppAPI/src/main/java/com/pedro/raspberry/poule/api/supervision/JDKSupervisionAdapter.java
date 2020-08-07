@@ -15,6 +15,8 @@ public class JDKSupervisionAdapter implements SupervisionAdapter {
 
     @Override
     public Optional<Insight> getInsights() {
-        return Optional.of(new Insight("NC", "NC", Float.toString(Runtime.getRuntime().freeMemory())));
+        long freeBytes = Runtime.getRuntime().freeMemory();
+        long freeMBytes = freeBytes / (1024 * 1024);
+        return Optional.of(new Insight("62", "1.2", Float.toString(freeMBytes)));
     }
 }

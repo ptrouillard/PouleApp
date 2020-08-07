@@ -18,12 +18,15 @@ public class SupervisionController {
     @GetMapping("/supervision")
     public String supervision(Model model) throws IOException, InterruptedException {
 
-        supervisionAdapter.getInsights().ifPresentOrElse( insight -> {
+        supervisionAdapter.getInsights().ifPresent( insight -> {
             model.addAttribute("insights", insight);
-        }, () -> {
+        });
+
+        if (!supervisionAdapter.getInsights().isPresent()) {
             model.addAttribute("error", "supervision.error");
             model.addAttribute("insights", Insight.error());
-        });
+        }
+
         return "supervision";
     }
 }

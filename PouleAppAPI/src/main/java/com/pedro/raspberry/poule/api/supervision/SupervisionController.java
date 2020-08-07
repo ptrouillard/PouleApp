@@ -27,9 +27,14 @@ public class SupervisionController {
     {
         logger.info("supervison insights invoked");
         AtomicReference<InsightResult> result = new AtomicReference<>();
-        adapter.getInsights().ifPresentOrElse(insight -> {
+        adapter.getInsights().ifPresent(insight -> {
             result.set(InsightResult.success(insight));
-        }, () -> { result.set(InsightResult.error("No data fetched from API"));});
+        });
+
+        // change this when JDK 9 will be supported on RASPI
+        if (!adapter.getInsights().isPresent()) {
+            result.set(InsightResult.error("No data fetched from API"));
+        }
         return result.get();
     }
 

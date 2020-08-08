@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -jar -Dspring.profiles.active=prod -Dserver.port=8000 ${project.build.finalName}.jar > poule-ui.log
+java -jar -Dspring.profiles.active=prod -Dserver.port=8000 /home/pi/PouleApp/${project.build.finalName}.jar > /home/pi/PouleApp/poule-ui.log

@@ -3,6 +3,7 @@ package com.pedro.raspberry.poule.ui.door;
 import com.google.common.base.Stopwatch;
 import com.pedro.raspberry.poule.adapter.door.DoorAdapter;
 import com.pedro.raspberry.poule.ui.audit.AuditService;
+import com.pedro.raspberry.poule.ui.config.ConfigService;
 import com.pedro.raspberry.poule.ui.remoteAddr.RemoteAddrHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,9 @@ public class DoorService {
 
     @Autowired
     private DoorAdapter doorAdapter;
+
+    @Autowired
+    private DoorRepository doorRepository;
 
     public long up(long ms) {
         auditService.audit("audit.door.opening.invoked", RemoteAddrHolder.get());
@@ -52,4 +56,5 @@ public class DoorService {
         auditService.audit("audit.door.closing.finished", elapsed, RemoteAddrHolder.get());
         return elapsed;
     }
+
 }

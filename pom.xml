@@ -23,6 +23,14 @@
 		<developerConnection>scm:git:https://github.com/ptrouillard/PouleApp.git</developerConnection>
 	 	<tag>HEAD</tag>
   	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>ftp-repository</id>
+			<url>ftp://192.168.1.38/homes/pedro</url>
+		</repository>
+	</distributionManagement>
+
 	<modules>
 		<module>PouleAppData</module>
 		<module>PouleAppAPI</module>

@@ -24,13 +24,13 @@ public class RemoteDoorAdapter implements DoorAdapter {
 
     @Override
     public void stepUp(final long ms) {
-        String url =service.getDoorUrl()+"/up?ms=" + ms;
+        String url =service.getConfig().getApiDoorUrl() +"/up?ms=" + ms;
         doorCall(url);
     }
 
     @Override
     public void stepDown(long ms) {
-        String url = service.getDoorUrl()+"/down?ms=" + ms;
+        String url = service.getConfig().getApiDoorUrl()+"/down?ms=" + ms;
         doorCall(url);
     }
 

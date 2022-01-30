@@ -29,7 +29,7 @@ public class RemoteSupervisionAdapter implements SupervisionAdapter {
         try {
             RestTemplateBuilder builder = new RestTemplateBuilder();
             RestTemplate restTemplate = builder.build();
-            ResponseEntity<InsightResult> insights = restTemplate.getForEntity(service.getSupervisionUrl(), InsightResult.class);
+            ResponseEntity<InsightResult> insights = restTemplate.getForEntity(service.getConfig().getApiSupervisionUrl(), InsightResult.class);
             return Optional.of(insights.getBody().getInsight());
         } catch (RuntimeException e) {
             logger.error("Cannot connect to API", e);

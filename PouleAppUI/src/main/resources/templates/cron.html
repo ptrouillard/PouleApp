@@ -34,27 +34,9 @@
             </button>
         </div>
 
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
-                <div class="col-lg-6">
-                    <form action="/cron/open" method="post" th:object="${cron}" id="form_open">
-                        <div class="form-group">
-                            <label for="OpenExpression" th:text="#{cron.open.expression}"/>
-                            <input type="text" th:field="*{openExpression}" class="form-control" size=10/>
-                        </div>
-                    </form>
-                    <form action="/cron/close" method="post" th:object="${cron}" id="form_close">
-                        <div class="form-group">
-                            <label for="CloseExpression" th:text="#{cron.close.expression}"/>
-                            <input type="text" th:field="*{closeExpression}" class="form-control" size=10/>
-                        </div>
-                    </form>
-                    <form action="/cron/shutdown" method="post" th:object="${cron}" id="form_shutdown">
-                    </form>
-                    <form action="/cron/start" method="post" th:object="${cron}" id="form_start">
-                    </form>
-                </div>
-                <div class="col-lg">
+                <div class="col">
                     <div class="form-group">
                         <button type="button" class="btn btn-outline-info" disabled>
                             <div th:if="${schedulerPaused == false}" class="text-success">
@@ -67,30 +49,59 @@
                             </div>
                         </button>
                     </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" form="form_open">
-                            <span class="fas fa-cogs">&nbsp;&nbsp;</span>
-                            <span th:text="#{cron.open}"></span>
-                        </button>
+                        <form action="/cron/shutdown" method="post" th:object="${cron}" id="form_shutdown">
+                            <button th:if="${schedulerPaused == false}" type="submit" class="btn btn-danger" form="form_shutdown">
+                                <span class="fas fa-pause">&nbsp;&nbsp;</span>
+                                <span th:text="#{cron.shutdown}">Pause scheduler</span>
+                            </button>
+                        </form>
                     </div>
                     <div class="form-group">
-                        <button type="submit" class="btn btn-primary" form="form_close">
-                            <span class="fas fa-cogs">&nbsp;&nbsp;</span>
-                            <span th:text="#{cron.close}"></span>
-                        </button>
+                        <form action="/cron/start" method="post" th:object="${cron}" id="form_start">
+                            <button th:unless="${schedulerPaused == false}" type="submit" class="btn btn-success" form="form_start">
+                                <span class="fas fa-play">&nbsp;&nbsp;</span>
+                                <span th:text="#{cron.start}">Resume scheduler</span>
+                            </button>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <button th:if="${schedulerPaused == false}" type="submit" class="btn btn-danger" form="form_shutdown">
-                            <span class="fas fa-pause">&nbsp;&nbsp;</span>
-                            <span th:text="#{cron.shutdown}">Pause scheduler</span>
-                        </button>
-                    </div>
-                    <div class="form-group">
-                        <button th:unless="${schedulerPaused == false}" type="submit" class="btn btn-success" form="form_start">
-                            <span class="fas fa-play">&nbsp;&nbsp;</span>
-                            <span th:text="#{cron.start}">Resume scheduler</span>
-                        </button>
-                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <span th:text="#{cron.open.time}">heure d'ouverture programmée</span>
+                </div>
+                <div class="col">
+                    <span th:text="${cron.openHour}"></span>&nbsp;h&nbsp;<span th:text="${cron.openMinutes}"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span th:text="#{cron.close.time}">heure de fermeture programmée</span>
+                </div>
+                <div class="col">
+                    <span th:text="${cron.closeHour}"></span>&nbsp;h&nbsp;<span th:text="${cron.closeMinutes}"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span th:text="#{cron.next.open.time}">Prochaine heure d'ouverture</span>
+                </div>
+                <div class="col">
+                    <span th:text="${cron.nextOpening}"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <span th:text="#{cron.next.open.time}">Prochaine heure de fermeture</span>
+                </div>
+                <div class="col">
+                    <span th:text="${cron.nextClosing}"></span>
                 </div>
             </div>
         </div>

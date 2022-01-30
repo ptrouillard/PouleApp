@@ -1,6 +1,8 @@
 package com.pedro.raspberry.poule.ui.cron;
 
 import com.pedro.raspberry.poule.ui.audit.AuditService;
+import com.pedro.raspberry.poule.ui.config.Config;
+import com.pedro.raspberry.poule.ui.config.ConfigService;
 import com.pedro.raspberry.poule.ui.cron.job.CloseDoorJob;
 import com.pedro.raspberry.poule.ui.cron.job.OpenDoorJob;
 import com.pedro.raspberry.poule.ui.door.DoorService;
@@ -22,76 +24,98 @@ public class CronService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
-    private String currentOpenExpression = "0 0 7 * * ?";
-    private String currentCloseExpression = "0 30 22 * * ?";
-
     private SchedulerFactory sf = null;
     private Scheduler sched;
     private JobDetail closeJob;
     private JobDetail openJob;
 
     @Autowired
-    private DoorService doorService;
+    private ConfigService configService;
+
+    /**
+     * Note : service is choosen depending on profile used.
+     * "default" profile will select DoorServiceMock impl.
+     * "prod" profile will select GPIODoorService which is the real service.
+     */
+    @Autowired
+    private ConfigService doorService;
 
     @Autowired
     private AuditService auditService;
 
     @PostConstruct
     public void initScheduler() throws SchedulerException {
+
         sf = new StdSchedulerFactory();
         sched = sf.getScheduler();
 
         openJob = newJob(OpenDoorJob.class)
                 .withIdentity("OpenDoorJob", "DoorJobs")
                 .build();
+        openJob.getJobDataMap().put("configService", configService);
         openJob.getJobDataMap().put("doorService", doorService);
 
-        CronTrigger openTrigger = newTrigger()
-                .withIdentity("OpenTrigger", "DoorJobs")
-                .withSchedule(cronSchedule(currentOpenExpression))
-                .build();
 
-        sched.scheduleJob(openJob, openTrigger);
+        // get cron expression from config
+        String openExpression = getCronExpression(getCurrentOpenHour(), getCurrentOpenMinutes());
+        scheduleOpening(openExpression);
 
         closeJob = newJob(CloseDoorJob.class)
                 .withIdentity("CloseDoorJob", "DoorJobs")
                 .build();
-        closeJob.getJobDataMap().put("doorService", doorService);
+        closeJob.getJobDataMap().put("configService", configService);
+        openJob.getJobDataMap().put("doorService", doorService);
 
-        CronTrigger closeTrigger = newTrigger()
-                .withIdentity("CloseTrigger", "DoorJobs")
-                .withSchedule(cronSchedule(currentCloseExpression))
-                .build();
-
-        sched.scheduleJob(closeJob, closeTrigger);
+        String closeExpression = getCronExpression(configService.getConfig().getCloseHour(), configService.getConfig().getCloseMinutes());
+        scheduleClosing(closeExpression);
         sched.start();
     }
 
-    public String getCurrentOpenExpression() {
-        return currentOpenExpression;
+    private void scheduleClosing(String closeExpression) throws SchedulerException {
+        CronTrigger closeTrigger = newTrigger()
+                .withIdentity("CloseTrigger", "DoorJobs")
+                .withSchedule(cronSchedule(closeExpression))
+                .build();
+
+        sched.scheduleJob(closeJob, closeTrigger);
     }
 
-    public String getCurrentCloseExpression() {
-        return currentCloseExpression;
+    private void scheduleOpening(String openExpression) throws SchedulerException {
+        CronTrigger openTrigger = newTrigger()
+                .withIdentity("OpenTrigger", "DoorJobs")
+                .withSchedule(cronSchedule(openExpression))
+                .build();
+
+        sched.scheduleJob(openJob, openTrigger);
     }
 
-    public void scheduleOpening(String expression) throws SchedulerException {
+    public String getCurrentOpenHour() {
+        return configService.getConfig().getOpenHour();
+    }
+
+    public String getCurrentOpenMinutes() {
+        return configService.getConfig().getOpenMinutes();
+    }
+
+    public String getCurrentCloseHour() {
+        return configService.getConfig().getCloseHour();
+    }
+
+    public String getCurrentCloseMinutes() {
+        return configService.getConfig().getCloseMinutes();
+    }
+
+    private void reScheduleOpening(Config old, Config newConfig) throws SchedulerException {
+
+        String currentOpenExpression = getCronExpression(old.getOpenHour(), old.getOpenMinutes());
+        String expression = getCronExpression(newConfig.getOpenHour(), newConfig.getOpenMinutes());
 
         auditService.audit("audit.open.scheduling.invoked", currentOpenExpression, expression);
 
-        if (currentOpenExpression.equals(expression)) {
-            logger.warn("expression is the same, nothing to be done for open trigger.");
-            return;
-        }
-        else {
+        if (!currentOpenExpression.equals(expression)) {
             currentOpenExpression = expression;
             sched.deleteJob(openJob.getKey());
-            CronTrigger openTrigger = newTrigger()
-                    .withIdentity("OpenTrigger", "DoorJobs")
-                    .withSchedule(cronSchedule(currentOpenExpression))
-                    .build();
-
-            sched.scheduleJob(openJob, openTrigger);
+            scheduleOpening(currentOpenExpression);
             logger.info("open job scheduled again with new expression {}", expression);
         }
 
@@ -99,27 +123,40 @@ public class CronService {
 
     }
 
-    public void scheduleClosing(String expression) throws SchedulerException {
+    public String getCronExpression(String hour, String minutes) {
+        return "0 " + (minutes != null ? minutes : "0") + " " + (hour != null ? hour : "0") + " * * ?";
+    }
 
+    private void reScheduleClosing(Config old, Config newConfig) throws SchedulerException {
+
+        String currentCloseExpression = getCronExpression(old.getCloseHour(), old.getCloseMinutes());
+        String expression = getCronExpression(newConfig.getCloseHour(), newConfig.getCloseMinutes());
         auditService.audit("audit.close.scheduling.invoked", currentCloseExpression, expression);
 
-        if (currentCloseExpression.equals(expression)) {
-            logger.warn("expression is the same, nothing to be done for close trigger.");
-            return;
-        }
-        else {
-            currentCloseExpression = expression;
+        if (!currentCloseExpression.equals(expression)) {
             sched.deleteJob(closeJob.getKey());
-            CronTrigger closeTrigger = newTrigger()
-                    .withIdentity("CloseTrigger", "DoorJobs")
-                    .withSchedule(cronSchedule(currentCloseExpression))
-                    .build();
-
-            sched.scheduleJob(closeJob, closeTrigger);
+            scheduleClosing(expression);
             logger.info("close job scheduled again with new expression {}", expression);
         }
 
         auditService.audit("audit.close.scheduling.finished");
+    }
+
+    /**
+     * This method is triggered if scheduler configuration changed
+     */
+    public void updateConfig(Config old, Config newOne) throws SchedulerException {
+
+        if (!old.getOpenHour().equals(newOne.getOpenHour()) || !old.getOpenMinutes().equals(newOne.getOpenMinutes())) {
+            // open scheduling is outdated, it must be renewed
+            reScheduleOpening(old, newOne);
+        }
+
+        if (!old.getCloseHour().equals(newOne.getCloseHour()) || !old.getCloseMinutes().equals(newOne.getCloseMinutes())) {
+            // close scheduling is outdated, it must be renewed
+            reScheduleClosing(old, newOne);
+        }
+
     }
 
     public void pauseScheduler(String remoteAddr) throws SchedulerException {

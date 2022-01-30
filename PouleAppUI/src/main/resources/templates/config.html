@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>Poule cron</title>
+    <title>Poule config</title>
     <meta http-equiv="Content-Type" content="text/html;" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -26,29 +26,102 @@
             <span th:text="#{${error}}"/>
         </div>
 
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-4">
-                    <form action="/config/save" method="post" th:object="${config}" id="form_config">
-                        <div class="form-group">
-                            <label for="CamUrl" th:text="#{config.cam.url}"/>
-                            <input type="text" th:field="*{webcamUrl}" class="form-control" size=10/>
+        <form th:action="@{/config/save}" method="post" th:object="${config}" id="form_config">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                            <!-- Config. réseau -->
+                            <h3 th:text="#{config.network}"></h3>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text" th:text="#{config.cam.url}"/>
+                                <input type="text" th:field="*{webcamUrl}" class="form-control" size=10 th:errorclass="fieldError">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('webcamUrl')}" th:errors="*{webcamUrl}"></div>
+                            </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{config.supervision.url}"/>
+                                <input type="text" th:field="*{apiSupervisionUrl}" class="form-control" size=10 th:errorclass="fieldError">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('apiSupervisionUrl')}" th:errors="*{apiSupervisionUrl}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{config.door.url}"/>
+                                <input type="text" th:field="*{apiDoorUrl}" class="form-control" size=10 th:errorclass="fieldError">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('apiDoorUrl')}" th:errors="*{apiDoorUrl}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <!-- Config. de la porte -->
+                            <h3 th:text="#{config.door}"></h3>
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{door.action_duration.step.open}"/>
+                                <input type="number" th:field="*{openStepTime}" class="form-control" size=10 th:errorclass="fieldError">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('openStepTime')}" th:errors="*{openStepTime}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{door.action_duration.step.close}"/>
+                                <input type="number" th:field="*{closeStepTime}" class="form-control" size=10 th:errorclass="fieldError">
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('closeStepTime')}" th:errors="*{closeStepTime}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{door.action_duration.open}"/>
+                                <input type="number" th:field="*{openTime}" class="form-control" size=10>
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('openTime')}" th:errors="*{openTime}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" th:text="#{door.action_duration.close}"/>
+                                <input type="number" th:field="*{closeTime}" class="form-control" size=10>
+                                <div class="alert alert-warning" th:if="${#fields.hasErrors('closeTime')}" th:errors="*{closeTime}"></div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" th:text="#{config.door.open}"></label>
+                            <input type="number" th:field="*{openHour}" class="form-control">
+                            <input type="number" th:field="*{openMinutes}" class="form-control">
                         </div>
-                        <div class="form-group">
-                            <label for="SupervisionUrl" th:text="#{config.supervision.url}"/>
-                            <input type="text" th:field="*{apiSupervisionUrl}" class="form-control" size=10/>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="input-group mb-3">
+                            <label class="input-group-text" th:text="#{config.door.close}"></label>
+                            <input type="number" th:field="*{closeHour}" class="form-control">
+                            <input type="number" th:field="*{closeMinutes}" class="form-control">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <div class="form-group">
-                            <label for="apiDoorUrl" th:text="#{config.door.url}"/>
-                            <input type="text" th:field="*{apiDoorUrl}" class="form-control" size=10/>
+                          <button type="submit" class="btn btn-primary" th:text="#{config.save}" form="form_config">Save config</button>
                         </div>
-                    </form>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" th:text="#{config.save}" form="form_config">Save config</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </body>
 </html>

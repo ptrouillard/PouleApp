@@ -99,41 +99,9 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6">
-                    <!-- save data only -->
-                    <form action="/door/save" method="post" th:object="${door}" id="form_save">
-                        <div class="form-group">
-                            <label for="Time" th:text="#{door.action_duration.step.open}"/>
-                            <input type="number" th:field="*{openStepTime}" class="form-control" size=10/>
-                        </div>
-                        <div class="form-group">
-                            <label for="Time" th:text="#{door.action_duration.step.close}"/>
-                            <input type="number" th:field="*{closeStepTime}" class="form-control" size=10/>
-                        </div>
-                        <div class="form-group">
-                            <label for="Time" th:text="#{door.action_duration.open}"/>
-                            <input type="number" th:field="*{openTime}" class="form-control" size=10/>
-                        </div>
-                        <div class="form-group">
-                            <label for="Time" th:text="#{door.action_duration.close}"/>
-                            <input type="number" th:field="*{closeTime}" class="form-control" size=10/>
-                        </div>
-                        <input type="hidden" th:field="${door.closeTime}"/>
-                        <input type="hidden" th:field="${door.openTime}"/>
-                        <input type="hidden" th:field="${door.closeStepTime}"/>
-                        <input type="hidden" th:field="${door.openStepTime}"/>
-                        <input type="hidden" th:field="${door.id}"/>
-                    </form>
-                </div>
                 <div class="col-lg">
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-success" form="form_save">
-                            <span class="fas fa-save">&nbsp;&nbsp;</span><span th:text="#{door.action_save}">Save data</span>
-                        </button>
-                    </div>
-
-                    <h3 th:text="#{door.security.message}">code de sécu nécessaire</h3>
+                    <p th:text="#{door.security.message}">code de sécu nécessaire</p>
                     <div class="form-group">
                         <label for="code" th:text="#{door.security.code}"/>
                         <input type="password" id="securityCode"/>

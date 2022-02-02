@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.SecureRandom;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Controller
 public class DoorController {
 
@@ -29,6 +32,7 @@ public class DoorController {
 
     @Autowired
     private ConfigService configService;
+
 
     @GetMapping("/door")
     public String door(Model model) {

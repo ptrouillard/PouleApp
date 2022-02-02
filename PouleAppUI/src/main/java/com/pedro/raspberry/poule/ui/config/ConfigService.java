@@ -58,6 +58,10 @@ public class ConfigService {
         saveKeyIfChanged(DOOR_CLOSE_TIME, () -> { return Long.toString(config.getCloseTime());});
         saveKeyIfChanged(DOOR_OPEN_STEP_TIME, () -> { return Long.toString(config.getOpenStepTime());});
         saveKeyIfChanged(DOOR_OPEN_TIME, () -> { return Long.toString(config.getOpenTime());});
+        saveKeyIfChanged(DOOR_OPEN_HOUR, () -> { return config.getOpenHour();});
+        saveKeyIfChanged(DOOR_OPEN_MINUTES, () -> { return config.getOpenMinutes();});
+        saveKeyIfChanged(DOOR_CLOSE_HOUR, () -> { return config.getCloseHour();});
+        saveKeyIfChanged(DOOR_CLOSE_MINUTES, () -> { return config.getCloseMinutes();});
 
         repository.save();
     }

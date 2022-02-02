@@ -1,6 +1,5 @@
 package com.pedro.raspberry.poule.ui.cron.job;
 
-import com.pedro.raspberry.poule.ui.config.ConfigService;
 import com.pedro.raspberry.poule.ui.door.DoorService;
 import com.pedro.raspberry.poule.ui.remoteAddr.RemoteAddrHolder;
 import org.quartz.Job;
@@ -15,11 +14,10 @@ public class OpenDoorJob implements Job {
 
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        logger.info("OpenDoorJob called.");
-        ConfigService configService = (ConfigService) jobExecutionContext.getMergedJobDataMap().get("configService");
-        DoorService doorService = (DoorService)jobExecutionContext.getMergedJobDataMap().get("doorService");
 
+        logger.info("OpenDoorJob called.");
         RemoteAddrHolder.set("cron");
-        doorService.up(configService.getConfig().getOpenTime());
+        DoorService doorService = (DoorService)jobExecutionContext.getJobDetail().getJobDataMap().get("doorService");
+        doorService.up();
     }
 }

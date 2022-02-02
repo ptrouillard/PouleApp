@@ -27,6 +27,22 @@ public class DoorService {
     @Autowired
     private DoorRepository doorRepository;
 
+    @Autowired
+    private ConfigService configService;
+
+    /**
+     * Open the door
+     * @return
+     */
+    public long up() {
+        return up(configService.getConfig().getOpenTime());
+    }
+
+    /**
+     * Move the door upwards during few seconds
+     * @param ms
+     * @return
+     */
     public long up(long ms) {
         auditService.audit("audit.door.opening.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();
@@ -42,6 +58,19 @@ public class DoorService {
         return elapsed;
     }
 
+    /**
+     * close the door
+     * @return
+     */
+    public long down() {
+        return down(configService.getConfig().getCloseTime());
+    }
+
+    /**
+     * Move the door downwards during few seconds
+     * @param ms
+     * @return
+     */
     public long down(long ms) {
         auditService.audit("audit.door.closing.invoked", RemoteAddrHolder.get());
         Stopwatch stopwatch = Stopwatch.createStarted();

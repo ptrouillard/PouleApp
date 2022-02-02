@@ -11,6 +11,7 @@ import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -38,10 +39,35 @@ public class CronService {
      * "prod" profile will select GPIODoorService which is the real service.
      */
     @Autowired
-    private ConfigService doorService;
+    private DoorService doorService;
 
     @Autowired
     private AuditService auditService;
+
+    @Bean
+    public JobDetail openJobDetail() {
+        return JobBuilder.newJob().ofType(OpenDoorJob.class)
+                //.storeDurably()
+                .withIdentity("OpenDoorJob2")
+                .withDescription("Open door job")
+                .build();
+    }
+
+    @Bean JobDetail closeJobDetail() {
+        return JobBuilder.newJob().ofType(CloseDoorJob.class)
+                //.storeDurably()
+                .withIdentity("CloseDoorJob2")
+                .withDescription("Close door job")
+                .build();
+    }
+
+    public Trigger trigger(JobDetail job, String expression) {
+        return TriggerBuilder.newTrigger().forJob(job)
+                //.withIdentity(name)
+                .withDescription("trigger for door")
+                .withSchedule(cronSchedule(expression))
+                .build();
+    }
 
     @PostConstruct
     public void initScheduler() throws SchedulerException {
@@ -49,22 +75,15 @@ public class CronService {
         sf = new StdSchedulerFactory();
         sched = sf.getScheduler();
 
-        openJob = newJob(OpenDoorJob.class)
-                .withIdentity("OpenDoorJob", "DoorJobs")
-                .build();
-        openJob.getJobDataMap().put("configService", configService);
+        openJob = openJobDetail();
         openJob.getJobDataMap().put("doorService", doorService);
-
 
         // get cron expression from config
         String openExpression = getCronExpression(getCurrentOpenHour(), getCurrentOpenMinutes());
         scheduleOpening(openExpression);
 
-        closeJob = newJob(CloseDoorJob.class)
-                .withIdentity("CloseDoorJob", "DoorJobs")
-                .build();
-        closeJob.getJobDataMap().put("configService", configService);
-        openJob.getJobDataMap().put("doorService", doorService);
+        closeJob = closeJobDetail();
+        closeJob.getJobDataMap().put("doorService", doorService);
 
         String closeExpression = getCronExpression(configService.getConfig().getCloseHour(), configService.getConfig().getCloseMinutes());
         scheduleClosing(closeExpression);
@@ -72,21 +91,15 @@ public class CronService {
     }
 
     private void scheduleClosing(String closeExpression) throws SchedulerException {
-        CronTrigger closeTrigger = newTrigger()
-                .withIdentity("CloseTrigger", "DoorJobs")
-                .withSchedule(cronSchedule(closeExpression))
-                .build();
 
-        sched.scheduleJob(closeJob, closeTrigger);
+        Trigger trigger = trigger(closeJob, closeExpression);
+        sched.scheduleJob(closeJob, trigger);
     }
 
     private void scheduleOpening(String openExpression) throws SchedulerException {
-        CronTrigger openTrigger = newTrigger()
-                .withIdentity("OpenTrigger", "DoorJobs")
-                .withSchedule(cronSchedule(openExpression))
-                .build();
 
-        sched.scheduleJob(openJob, openTrigger);
+        Trigger trigger = trigger(openJob, openExpression);
+        sched.scheduleJob(openJob, trigger);
     }
 
     public String getCurrentOpenHour() {

@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.pedro.raspberry</groupId>
 	<artifactId>poule</artifactId>
-	<version>1.0.4</version>
+	<version>1.0.5-SNAPSHOT</version>
 	<name>PouleApp</name>
 	<description>PouleApp application</description>
 
@@ -21,7 +21,7 @@
 	<!-- for release -->
 	<scm>
 		<developerConnection>scm:git:https://github.com/ptrouillard/PouleApp.git</developerConnection>
-	 	<tag>poule-1.0.4</tag>
+	 	<tag>HEAD</tag>
   	</scm>
 
 	<distributionManagement>
